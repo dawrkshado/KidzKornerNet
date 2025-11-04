@@ -6,7 +6,7 @@ import Bird from "../../../../assets/Animals/Lesson1/Bird.webp";
 import Horse from "../../../../assets/Animals/Lesson1/Horse.webp";
 import Snake from "../../../../assets/Animals/Lesson1/Snake.webp";
 import Bunny from "../../../../assets/Animals/Lesson1/Bunny.webp";
-import Fish from "../../../../assets/Animals/Lesson1/Fish.webp";
+import Fish from "../../../../assets/Animals/Lesson1/fish.webp";
 
 import WaterDroppable from "../../../../assets/Animals/Lesson2/WaterDroppable.webp";
 import ForestDroppable from "../../../../assets/Animals/Lesson2/ForestDroppable.webp";

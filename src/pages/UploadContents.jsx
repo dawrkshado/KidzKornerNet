@@ -145,13 +145,13 @@ function TeacherUploadPage() {
       </div>
       <div className="mt-2 md:mt-0 flex items-center gap-2">
         <a
-          href={f.file || f.link}
-          target="_blank"
-          rel="noreferrer"
-          className="text-blue-600 underline"
-        >
-          Go to link / Download
-        </a>
+  href={f.file || f.link}
+  target="_blank"
+  rel="noreferrer"
+  className="text-blue-600 underline"
+>
+  {f.file ? "Download File" : "View Link"}
+</a>
         <button
           onClick={() => handleDelete(f.id)}
           className="bg-red-500 text-white px-3 py-1 rounded"

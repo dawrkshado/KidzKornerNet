@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { DndContext, useDraggable, useDroppable, pointerWithin } from "@dnd-kit/core";
 import BG from "../../../../assets/Animals/Lesson5/bg.webp";
 import Hamster from "../../../../assets/Animals/Lesson5/hamster.webp";
-import Tiger from "../../../../assets/Animals/Lesson5/Tiger.webp";
+import Tiger from "../../../../assets/Animals/Lesson5/tiger.webp";
 import Lion from "../../../../assets/Animals/Lesson4/Lion.webp";
 import Elephant from "../../../../assets/Animals/Lesson4/Elephant.webp";
 import Cat from "../../../../assets/Animals/Lesson3/Cat.webp";

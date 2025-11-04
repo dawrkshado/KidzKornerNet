@@ -20,7 +20,7 @@ export default defineConfig({
     port: 5173
   },
   preview: {
-    allowedHosts: ['kidzkorner.onrender.com']},
+    allowedHosts: ['kidzkorner.onrender.com', 'kidzkorner.site', 'www.kidzkorner.site']},
   
   css: {
     postcss: {

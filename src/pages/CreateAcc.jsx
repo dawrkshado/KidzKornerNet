@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import CreateUserBG from "../assets/Admin/CreateUSER.webp";
 import api from "../api";
+import validator from "validator"
 
 function CreateAcc() {
   const [firstName, setFirstName] = useState("");
@@ -10,7 +11,7 @@ function CreateAcc() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState(""); 
-  const [roles, setRoles] = useState([]); // fetched roles
+  const [roles, setRoles] = useState([]); 
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -18,7 +19,7 @@ function CreateAcc() {
       try {
         const res = await api.get("/api/roles/");
         setRoles(res.data);
-        if (res.data.length > 0) setRole(res.data[0]); // set default to first role (it's a string)
+        if (res.data.length > 0) setRole(res.data[0]);
       } catch (error) {
         console.error("Error fetching roles:", error);
       }
@@ -36,8 +37,28 @@ function CreateAcc() {
     setMessage("");
   };
 
+
+  
+const validate = (value) => {
+      return validator.isStrongPassword(value, {
+    minLength: 8,
+    minLowercase: 1,
+    minUppercase: 1,
+    minNumbers: 1,
+    minSymbols: 1
+  });
+};
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validate(password)){
+      setMessage(`Password is not strong enough. Use at least 8 chars, uppercase, lowercase, number, and symbol.`);
+      setTimeout(() => setMessage(), 5000);
+      return;
+    }
+
 
     try {
       const response = await api.post("/api/register/", {
@@ -128,6 +149,7 @@ function CreateAcc() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+
               className="w-full p-2 rounded-md border"
             />
           </div>

@@ -36,7 +36,6 @@ function ParentsChildRegistration() {
     setFirstName("");
     setLastName("");
     setBirthDate("");
-
     setSchedule("")
   };
 
@@ -49,6 +48,7 @@ function ParentsChildRegistration() {
       setTimeout(() => setShowMessage(), 3000);
       return;
     }
+
 
     try {
       const response = await api.post(

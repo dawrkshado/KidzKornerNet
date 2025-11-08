@@ -1,5 +1,6 @@
 import Form from "../components/Form";
 import Bg from "../assets/loginbg.webp";
+import { Link } from "react-router-dom";
 
 function Login() {
   return (
@@ -10,6 +11,12 @@ function Login() {
      <div className="translate-y-26"> 
     <Form route="/api/token/" method="login" />
   </div>
+          <div className="absolute top-115  2xl:top-170 text-blue-500  w-fit ">
+    <Link to="/forgotPassword">
+      <p className="hover:underline">Forgot Password?</p>
+    </Link>
+
+    </div>
     </div>
   );
 }

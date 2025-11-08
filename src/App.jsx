@@ -12,6 +12,7 @@ import Login from "./pages/Login.jsx"
 import About from "./pages/About.jsx"
 import NotFound from "./pages/NotFound.jsx"
 import ScrollToTop from "./components/ScrollToTop.jsx"
+import ForgotPassword from "./pages/ForgotPassword.jsx";
 
 import Stories from "./pages/Stories.jsx"
 import Story1 from "./pages/Story1.jsx"
@@ -52,6 +53,8 @@ import AlphabetEasy3 from "./pages/AlphabetEasy3.jsx"
 import AlphabetMedium1 from "./pages/AlphabetMedium1.jsx"
 import AlphabetMedium2 from "./pages/AlphabetMedium2.jsx"
 import AlphabetHard1 from "./pages/AlphabetHard1.jsx"
+
+
 
 import A from "./pages/A.jsx"
 import B from "./pages/B.jsx"
@@ -224,6 +227,7 @@ function App() {
       <Routes>    
             <Route path="/" element={<Navigate to="/login"/>} />
             <Route path="/login" element={<Login/>}/>
+            <Route path="/forgotPassword" element={<ForgotPassword/>}/>
 
             {!role && <Route path="*" element={<Navigate to="/login" replace />} />}
 

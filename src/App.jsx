@@ -226,7 +226,7 @@ function App() {
             <Route path="/" element={<Navigate to="/login"/>} />
             <Route path="/login" element={<Login/>}/>
             <Route path="/forgotPassword" element={<ForgotPassword/>}/>
-            <Route path="/reset-password/:uid/:token" element={<ResetPassword/>}/>
+            <Route path="/reset-password/:uidb64/:token" element={<ResetPassword/>}/>
         
 
             {!role && <Route path="*" element={<Navigate to="/login" replace />} />}

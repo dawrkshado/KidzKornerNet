@@ -15,7 +15,6 @@ function Login() {
     <Link to="/forgotPassword">
       <p className="hover:underline">Forgot Password?</p>
     </Link>
-
     </div>
     </div>
   );

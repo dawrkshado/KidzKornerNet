@@ -31,11 +31,9 @@ const handleSubmit = async (e) =>{
 
           <div className="flex gap-5 ">
              <button type="submit" className=" bg-green-500 h-10 w-20 2xl:h-15 2xl:w-25 rounded-sm transform transition hover:scale-110">
-            Send
+             Submit
           </button>
-          <button className="h-10 w-20 2xl:h-15 2xl:w-25 bg-red-600 rounded-sm transform transition hover:scale-110">
-            Cancel
-          </button >
+        
           </div>
       </div>     
     </form>

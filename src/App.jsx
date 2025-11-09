@@ -6,13 +6,13 @@ import { TimeProvider } from "./TimeProvider.jsx";
 import LockOverlay from "./components/LockOverlay.jsx";
 import UnlockOverlay from "./components/UnlockOverlay";
 
-
 import Home from "./pages/Home.jsx"
 import Login from "./pages/Login.jsx"
 import About from "./pages/About.jsx"
 import NotFound from "./pages/NotFound.jsx"
 import ScrollToTop from "./components/ScrollToTop.jsx"
 import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx"
 
 import Stories from "./pages/Stories.jsx"
 import Story1 from "./pages/Story1.jsx"
@@ -110,8 +110,6 @@ import AnimalsLesson4Activity2 from "./pages/Newcontent/ANIMALS/Lesson4/AnimalsL
 import AnimalsLesson5 from "./pages/Newcontent/ANIMALS/Lesson5/AnimalsLesson5.jsx"
 import AnimalsLesson5Activity1 from "./pages/Newcontent/ANIMALS/Lesson5/AnimalsLesson5Activity1.jsx"
 import AnimalsLesson5Activity2 from "./pages/Newcontent/ANIMALS/Lesson5/AnimalsLesson5Activity2.jsx"
-
-
 
 
 import Color from "./pages/Color.jsx"
@@ -228,6 +226,8 @@ function App() {
             <Route path="/" element={<Navigate to="/login"/>} />
             <Route path="/login" element={<Login/>}/>
             <Route path="/forgotPassword" element={<ForgotPassword/>}/>
+            <Route path="/reset-password/:uid/:token" element={<ResetPassword/>}/>
+        
 
             {!role && <Route path="*" element={<Navigate to="/login" replace />} />}
 
@@ -239,7 +239,7 @@ function App() {
             <Route path="/usercontrol" element={<UserAccControl />} />
             <Route path="/" element={<Navigate to="/teacher"/>} />
          
-               <Route path="/dashboardparentz" element={<ParentsDashboard/>}/>
+            <Route path="/dashboardparentz" element={<ParentsDashboard/>}/>
         </>}
 
          {role === "Parent" && <>

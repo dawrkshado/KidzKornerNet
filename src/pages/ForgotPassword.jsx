@@ -16,7 +16,7 @@ const handleSubmit = async (e) =>{
       console.log(res.data)
       set_email("")
     } catch (err) {
-      console.error("Error fetching completions:", err);
+      console.error("Error fetching email:", err);
     }
   
 }

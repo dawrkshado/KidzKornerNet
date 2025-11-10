@@ -135,6 +135,70 @@ function AnimalLesson2() {
         </div>
       </div>
 
+
+
+            {/* EXERCISE MODAL */}
+{clicked && clickedID === "Exercises" && question && (
+  <div
+    className="fixed inset-0 z-50 flex justify-center items-center bg-cover bg-center"
+    style={{ backgroundImage: `url(${ExerciseLesson2})` }}
+  >
+    {/* Exit button */}
+    <button
+      onClick={handleExit}
+      className="fixed right-4 top-4 bg-red-600 h-10 w-10 flex items-center justify-center rounded-full cursor-pointer z-50"
+    >
+      X
+    </button>
+
+    {/* Question */}
+    <p className="text-3xl font-bold mb-8 absolute top-[5%] text-center w-full">
+      What animal is {question.action}?
+    </p>
+
+    {/* Animal images positioned freely */}
+    <div className="relative w-full h-[80vh]">
+      <img
+        src={snakeaction}
+        alt="Snake"
+        onClick={() => handleAnswer("snake")}
+        className="absolute top-[50%] left-[5%] w-auto cursor-pointer hover:scale-110 transition-transform duration-300"
+      />
+      <img
+        src={rabbitaction}
+        alt="Rabbit"
+        onClick={() => handleAnswer("rabbit")}
+        className="absolute top-[12%] left-[80%] w-auto cursor-pointer hover:scale-110 transition-transform duration-300"
+      />
+      <img
+        src={horseaction}
+        alt="Horse"
+        onClick={() => handleAnswer("horse")}
+        className="absolute top-[55%] left-[30%] w-auto cursor-pointer hover:scale-110 transition-transform duration-300"
+      />
+      <img
+        src={fishaction}
+        alt="Fish"
+        onClick={() => handleAnswer("fish")}
+        className="absolute top-[88%] left-[75%] w-auto cursor-pointer hover:scale-110 transition-transform duration-300"
+      />
+      <img
+        src={birdaction}
+        alt="Bird"
+        onClick={() => handleAnswer("bird")}
+        className="absolute top-[10%] left-[50%] w-auto cursor-pointer hover:scale-110 transition-transform duration-300"
+      />
+    </div>
+
+    {/* Feedback */}
+    {feedback && (
+      <p className="mt-6 text-5xl font-semibold absolute bottom-[50%] text-center w-full">
+        {feedback}
+      </p>
+    )}
+  </div>
+)}
+
       {/* ACTIVITIES MODAL */}
       {clicked && clickedID === "Activities" && (
         <div

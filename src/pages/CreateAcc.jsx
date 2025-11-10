@@ -40,24 +40,42 @@ function CreateAcc() {
 
   
 const validate = (value) => {
-      return validator.isStrongPassword(value, {
+  // Check for consecutive numbers like 1234 or 9876
+  const hasConsecutiveNumbers = /(0123|1234|2345|3456|4567|5678|6789|9876|8765|7654|6543|5432|4321|3210)/.test(value);
+
+  if (hasConsecutiveNumbers) {
+    return { valid: false, message: "Password cannot contain consecutive numbers like 1234 or 9876." };
+  }
+
+  // Check if password is strong
+  const isStrong = validator.isStrongPassword(value, {
     minLength: 8,
     minLowercase: 1,
     minUppercase: 1,
     minNumbers: 1,
-    minSymbols: 1
+    minSymbols: 1,
   });
+
+  if (!isStrong) {
+    return { valid: false, message: "Password is not strong enough. Use at least 8 characters with uppercase, lowercase, number, and symbol." };
+  }
+
+  // If both checks pass
+  return { valid: true, message: "" };
 };
+
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validate(password)){
-      setMessage(`Password is not strong enough. Use at least 8 chars, uppercase, lowercase, number, and symbol.`);
-      setTimeout(() => setMessage(), 5000);
-      return;
-    }
+    const result = validate(password);
+
+if (!result.valid) {
+  setMessage(result.message);
+  setTimeout(() => setMessage(""), 5000);
+  return;
+}
 
 
     try {

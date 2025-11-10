@@ -190,7 +190,7 @@ function AnimalsLesson1Activity2() {
               <button
                 key={choice}
                 onClick={() => handleChoice(choice)}
-                className={`px-6 py-3 rounded-lg bg-white text-black font-bold hover:bg-gray-200 transition ${
+                className={`px-6 py-3 2xl:h-20 2xl:w-50 2xl:text-4xl rounded-lg bg-white text-black font-bold hover:bg-gray-200 transition ${
                   showWrong && choice !== currentRound.answer ? "animate-shake bg-red-300" : ""
                 }`}
               >

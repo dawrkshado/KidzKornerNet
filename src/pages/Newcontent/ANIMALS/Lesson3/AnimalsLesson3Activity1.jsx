@@ -38,6 +38,9 @@ import babycow from "../../../../assets/Animals/ExerciseSound/babycow.mp3";
 import babysheep from "../../../../assets/Animals/ExerciseSound/babysheep.mp3";
 import api from "../../../../api";
 
+import useSound from "use-sound";
+import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
+
 const PROGRESS_KEY = "alphabetMediumProgress";
 function saveProgress(level) {
   const progress = JSON.parse(localStorage.getItem(PROGRESS_KEY)) || { level1: false, level2: false };
@@ -72,6 +75,7 @@ function AnimalsLessonActivity1() {
   const childId = selectedChild?.id; // this is the child ID you need
   const navigate = useNavigate();
   const { playSound: playApplause, stopSound: stopApplause } = useWithSound(applause);
+  const [playWrong] = useSound(wrongSound, { volume: 1.0 });
 
   const [dropped, setDropped] = useState({});
   const [count, setCount] = useState(1);
@@ -181,6 +185,10 @@ function AnimalsLessonActivity1() {
           [draggedId]: droppedId,
         }));
       }
+      else {
+      // ❌ Wrong drop → play wrong sound
+      playWrong();
+    }
     }
   }
 

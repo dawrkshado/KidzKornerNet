@@ -30,6 +30,9 @@ import { useNavigate } from "react-router-dom";
 
 import api from "../../../../api";
 
+import useSound from "use-sound";
+import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
+
 function Droppable({ id, placedShape, shape }) {
   const { isOver, setNodeRef } = useDroppable({ id });
   const style = {
@@ -82,9 +85,9 @@ function saveProgress(level) {
 }
 
 function AnimalsLesson2Activity1() {
-    const selectedChild = JSON.parse(localStorage.getItem("selectedChild"));
+  const selectedChild = JSON.parse(localStorage.getItem("selectedChild"));
   const childId = selectedChild?.id; // this is the child ID you need
-
+  const [playWrong] = useSound(wrongSound, { volume: 1.0 });
   const navigate = useNavigate();
   const { playSound: playApplause, stopSound: stopApplause } =
     useWithSound(applause);
@@ -180,6 +183,10 @@ function AnimalsLesson2Activity1() {
           [draggedId]: droppedId,
         }));
       }
+      else {
+      // ❌ Wrong drop → play wrong sound
+      playWrong();
+    }
     }
   }
 

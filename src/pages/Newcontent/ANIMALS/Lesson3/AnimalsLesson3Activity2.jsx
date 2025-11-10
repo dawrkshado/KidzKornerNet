@@ -34,6 +34,10 @@ import babydog from "../../../../assets/Animals/ExerciseSound/babydog.mp3";
 import babycat from "../../../../assets/Animals/ExerciseSound/babycat.mp3";
 import babychicken from "../../../../assets/Animals/ExerciseSound/babychicken.mp3";
 
+
+import useSound from "use-sound";
+import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
+
 function Droppable({ id, placedShape, shape }) {
   const { isOver, setNodeRef } = useDroppable({ id });
   const style = { opacity: isOver ? "0.5" : "1", zIndex: isOver ? "10" : "1" };
@@ -72,7 +76,7 @@ function AnimalsLessonActivity2() {
   const [count, setCount] = useState(1);
   const selectedChild = JSON.parse(localStorage.getItem("selectedChild"));
   const childId = selectedChild?.id; // this is the child ID you need
-
+  const [playWrong] = useSound(wrongSound, { volume: 1.0 });
 
   // ✅ One ref for all baby sounds
   const babySoundRef = useRef(null);
@@ -118,6 +122,10 @@ function AnimalsLessonActivity2() {
         if (draggedId === "dog") setTimeout(() => setCurrentRound(2), 1000);
         if (draggedId === "cat") setTimeout(() => setCurrentRound(3), 1000);
       }
+      else {
+      // ❌ Wrong drop → play wrong sound
+      playWrong();
+    }
     }
   }
 

@@ -28,6 +28,9 @@ import applause from "../../../../assets/Sounds/applause.wav";
 import { useWithSound } from "../../../../components/useWithSound";
 import { useNavigate } from "react-router-dom";
 
+import useSound from "use-sound";
+import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
+
 import catSound from "../../../../assets/Animals/Lesson2/catSound.mp3";
 import cowSound from "../../../../assets/Animals/Lesson2/cowSound.mp3";
 import dogSound from "../../../../assets/Animals/Lesson2/dogSound.mp3";  // adjusted path
@@ -76,7 +79,8 @@ function AnimalsLessonActivity1() {
   const { playSound: playApplause, stopSound: stopApplause } = useWithSound(applause);
   const [dropped, setDropped] = useState({});
   const [count, setCount] = useState(0);
-  
+  const [playWrong] = useSound(wrongSound, { volume: 1.0 });
+
 
 
   
@@ -90,40 +94,46 @@ function AnimalsLessonActivity1() {
   const handleSkip = () => setShowTutorial(false);
 
   function handleDragEnd(event) {
-    if (event.over) {
-      const draggedId = event.active.id;
-      const droppedId = event.over.id;
+  if (event.over) {
+    const draggedId = event.active.id;
+    const droppedId = event.over.id;
 
-      if (draggedId === droppedId) {
-        let sound;
-        switch (draggedId) {
-          case "meow":
-            sound = new Audio(catSound);
-            break;
-          case "moo":
-            sound = new Audio(cowSound);
-            break;
-          case "arf":
-            sound = new Audio(dogSound);
-            break;
-          case "oink":
-            sound = new Audio(pigSound);
-            break;
-          case "quack":
-            sound = new Audio(duckSound);
-            break;
-          default:
-            break;
-        }
-        if (sound) {
-          sound.volume = 1.0;
-          sound.play().catch(err => console.log("Sound playback blocked:", err));
-        }
-
-        setDropped(prev => ({ ...prev, [draggedId]: droppedId }));
+    if (draggedId === droppedId) {
+      // ✅ Correct drop → play animal sound
+      let sound;
+      switch (draggedId) {
+        case "meow":
+          sound = new Audio(catSound);
+          break;
+        case "moo":
+          sound = new Audio(cowSound);
+          break;
+        case "arf":
+          sound = new Audio(dogSound);
+          break;
+        case "oink":
+          sound = new Audio(pigSound);
+          break;
+        case "quack":
+          sound = new Audio(duckSound);
+          break;
+        default:
+          break;
       }
+
+      if (sound) {
+        sound.volume = 1.0;
+        sound.play().catch(err => console.log("Sound playback blocked:", err));
+      }
+
+      setDropped(prev => ({ ...prev, [draggedId]: droppedId }));
+    } else {
+      // ❌ Wrong drop → play wrong sound
+      playWrong();
     }
   }
+}
+
 
   const isGameFinished = dropped["arf"] && dropped["meow"] && dropped["moo"] && dropped["oink"] && dropped["quack"];
 

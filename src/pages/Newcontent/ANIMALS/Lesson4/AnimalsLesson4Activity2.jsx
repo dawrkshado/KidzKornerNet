@@ -39,6 +39,9 @@ import { useNavigate } from "react-router-dom";
 
 import TutorialVideo from "../../../../assets/videos/LiveTutorial2.mp4";  // tutorial video import
 
+import useSound from "use-sound";
+import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
+
 function Droppable({ id, placedShape, shape }) {
   const { isOver, setNodeRef } = useDroppable({ id });
   const style = {
@@ -98,6 +101,7 @@ function AnimalsLesson4Activity2() {
   const [showTutorial, setShowTutorial] = useState(true);  // new state for tutorial
   const selectedChild = JSON.parse(localStorage.getItem("selectedChild"));
   const childId = selectedChild?.id; // this is the child ID you need
+  const [playWrong] = useSound(wrongSound, { volume: 1.0 });
 
   const animalHabitats = {
     armadilo: "desert",
@@ -125,6 +129,10 @@ function AnimalsLesson4Activity2() {
       if (animalHabitats[draggedId] === droppedId && !dropped.includes(draggedId)) {
         setDropped((prev) => [...prev, draggedId]);
       }
+       else {
+      // ❌ Wrong drop → play wrong sound
+      playWrong();
+    }
     }
   }
 

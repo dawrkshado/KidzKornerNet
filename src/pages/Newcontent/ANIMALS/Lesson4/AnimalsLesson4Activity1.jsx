@@ -20,6 +20,9 @@ import { useWithSound } from "../../../../components/useWithSound";
 import { useNavigate } from "react-router-dom";
 import api from "../../../../api";
 
+import useSound from "use-sound";
+import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
+
 import SoundTutorial4 from "../../../../assets/videos/LiveTutorial1.mp4";  // ← tutorial video file path
 
 function Droppable({ id, placedShape, shape }) {
@@ -78,7 +81,7 @@ function AnimalsLesson4Activity1() {
   const [showTutorial, setShowTutorial] = useState(true);  // ← tutorial overlay state
   const selectedChild = JSON.parse(localStorage.getItem("selectedChild"));
   const childId = selectedChild?.id; // this is the child ID you need
-
+   const [playWrong] = useSound(wrongSound, { volume: 1.0 });
   const acceptedAnimals = ["monkey", "giraffe", "lion"];
 
   function handleDragEnd(event) {
@@ -93,6 +96,10 @@ function AnimalsLesson4Activity1() {
       ) {
         setDropped((prev) => [...prev, draggedId]);
       }
+        else {
+      // ❌ Wrong drop → play wrong sound
+      playWrong();
+    }
     }
   }
 

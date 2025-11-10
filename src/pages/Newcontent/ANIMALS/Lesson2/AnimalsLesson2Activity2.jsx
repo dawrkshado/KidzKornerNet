@@ -28,6 +28,10 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../../api";
 
 
+import useSound from "use-sound";
+import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
+
+
 
 function Droppable({ id, placedShape, shape }) {
   const { isOver, setNodeRef } = useDroppable({ id });
@@ -76,6 +80,7 @@ function AnimalsLesson2Activity2() {
   const navigate = useNavigate();
   const { playSound: playApplause, stopSound: stopApplause } = useWithSound(applause);
   const [dropped, setDropped] = useState({});
+  const [playWrong] = useSound(wrongSound, { volume: 1.0 });
 
   const animals = [
     { id: "bird1", type: "air", img: Bird },
@@ -94,6 +99,10 @@ function AnimalsLesson2Activity2() {
       if (draggedAnimal.type === droppedId) {
         setDropped(prev => ({ ...prev, [draggedId]: droppedId }));
       }
+      else {
+      // ❌ Wrong drop → play wrong sound
+      playWrong();
+    }
     }
   }
 

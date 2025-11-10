@@ -156,6 +156,7 @@ useEffect(() => {
                         <th className='border-r-4'>Lesson/Activity</th>
                         <th className='border-r-4'>Time</th>
                         <th className='border-r-4'>Star</th>
+                        <th className='border-r-4'>Time and Date Finished</th>
                       </tr>
                       </thead>
                    
@@ -165,8 +166,9 @@ useEffect(() => {
                               <tr key={id}>
                       
                               <td className='border-r-4'>{record.game_level.game_name}</td>
-                              <td className='border-r-4'>{record.time}</td>
+                              <td className='border-r-4'>{record.time} sec</td>
                               <td className='border-r-4'>{record.star} ⭐</td>
+                              <td className='border-r-4'>{record.completed_at}</td>
                               </tr>
                         ))}
                       </tbody>
@@ -208,6 +210,7 @@ useEffect(() => {
                         <th className='border-r-4'>Lesson/Activity</th>
                         <th className='border-r-4'>Time</th>
                         <th className='border-r-4'>Star</th>
+                        <th className='border-r-4'>Time and Date Finished</th>
                       </tr>
                       </thead>
                    
@@ -216,9 +219,10 @@ useEffect(() => {
                               .map((record, id) => (
                               <tr key={id}>
                       
-                              <td>{record.game_level.game_name}</td>
-                              <td>{record.time}</td>
-                              <td>{record.star} ⭐</td>
+                              <td className='border-r-4'>{record.game_level.game_name}</td>
+                              <td className='border-r-4'>{record.time} sec</td>
+                              <td className='border-r-4'>{record.star} ⭐</td>
+                              <td className='border-r-4'>{record.completed_at}</td>
                               </tr>
                         ))}
                          
@@ -259,6 +263,7 @@ useEffect(() => {
                         <th className='border-r-4'>Lesson/Activity</th>
                         <th className='border-r-4'>Time</th>
                         <th className='border-r-4'>Star</th>
+                        <th className='border-r-4'>Time and Date Finished</th>
                       </tr>
                       </thead>
                    
@@ -268,8 +273,9 @@ useEffect(() => {
                               <tr key={id}>
                     
                               <td className='border-r-4'>{record.game_level.game_name}</td>
-                              <td className='border-r-4'>{record.time}</td>
+                              <td className='border-r-4'>{record.time} sec</td>
                               <td className='border-r-4'>{record.star} ⭐</td>
+                              <td className='border-r-4'>{record.completed_at}</td>
                               </tr>
                         ))}
                          
@@ -308,9 +314,9 @@ useEffect(() => {
                       <thead className='border-4'>
                       <tr >
                         <th className='border-4'>Lesson/Activity</th>
-
                         <th className='border-4'>Time</th>
                         <th className='border-4'>Star</th>
+                        <th className='border-r-4'>Time and Date Finished</th>
                       </tr>
                       </thead>
                    
@@ -320,9 +326,9 @@ useEffect(() => {
                               <tr key={id}    >
                    
                               <td className='border-r-4'>{record.game_level.game_name}</td>
-
-                              <td className='border-r-4'>{record.time}</td>
+                              <td className='border-r-4'>{record.time} sec</td>
                               <td className='border-r-4'>{record.star} ⭐</td>
+                              <td className='border-r-4'>{record.completed_at}</td>
                               </tr>
                         ))}
                          
@@ -360,22 +366,22 @@ useEffect(() => {
                     <table className='h-[100%] w-[100%] '>
                       <thead className='border-4'>
                       <tr >
-                        <th className='border-4'>Lesson/Activitiesy</th>
-                        <th className='border-4'>Level</th>
+                        <th className='border-4'>Lesson/Activities</th>
                         <th className='border-4'>Time</th>
                         <th className='border-4'>Star</th>
+                        <th className='border-r-4'>Time and Date Finished</th>
                       </tr>
                       </thead>
                   
                       <tbody className='border-4'>
-                        {childRecord.filter(record => record.game_level.game_name === "Lesson4 Activity1"  || record.game_level.game_name === " Lesson4 Activity2" )
+                        {childRecord.filter(record => record.game_level.game_name === "Lesson4 Activity1"  || record.game_level.game_name === "Lesson4 Activity2" )
                               .map((record, id) => (
                               <tr key={id}    >
                    
                               <td className='border-r-4'>{record.game_level.game_name}</td>
-                              <td className='border-r-4'>{record.game_level.level}</td>
-                              <td className='border-r-4'>{record.time}</td>
+                              <td className='border-r-4'>{record.time} sec</td>
                               <td className='border-r-4'>{record.star} ⭐</td>
+                              <td className='border-r-4'>{record.completed_at}</td>
                               </tr>
                         ))}
                          

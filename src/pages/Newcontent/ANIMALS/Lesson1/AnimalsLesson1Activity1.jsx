@@ -135,7 +135,7 @@ function AnimalsLessonActivity1() {
 }
 
 
-  const isGameFinished = dropped["arf"] && dropped["meow"] && dropped["moo"] && dropped["oink"] && dropped["quack"];
+  const isGameFinished = dropped["arf"] && dropped["meow"] && dropped["moo"] && dropped["oink"] && dropped["quack"] || count >= 60;
 
   useEffect(() => {
     if (showTutorial) return;  // only start background music after tutorial

@@ -1,5 +1,6 @@
 import React, { useState, useRef,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Back from "../../../../components/Back";
 
 import act1live from "../../../../assets/Animals/act1live.webp";
 import act2live from "../../../../assets/Animals/act2live.webp";
@@ -113,6 +114,7 @@ function AnimalLesson4() {
     <>
       <div className="relative w-full min-h-screen overflow-y-auto">
         {/* Main background */}
+        <Back/>
         <img
           src="/Bg/mainvidbg.webp"
           alt="Main background"

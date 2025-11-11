@@ -14,6 +14,7 @@ import horseaction from "../../../../assets/Animals/ExerciseAction/horseaction.w
 import rabbitaction from "../../../../assets/Animals/ExerciseAction/rabbitaction.webp";
 import snakeaction from "../../../../assets/Animals/ExerciseAction/snakeaction.webp";
 import animalactionvid from "../../../../assets/Animals/ExerciseVideo/animalactionvid.mp4";
+import Back from "../../../../components/Back";
 
 function AnimalLesson2() {
   const [clicked, setClicked] = useState(false);
@@ -98,6 +99,7 @@ function AnimalLesson2() {
   return (
     <>
       <div className="relative w-full min-h-screen overflow-y-auto">
+        <Back/>
         <img src="/Bg/mainvidbg.webp" alt="Main background" className="w-full h-auto block" />
         <div className="absolute top-[10%] left-[30%] transform -translate-x-1/2 w-[48%]">
           <video

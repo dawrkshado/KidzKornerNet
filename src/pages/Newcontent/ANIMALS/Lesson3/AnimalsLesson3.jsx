@@ -4,6 +4,7 @@ import act1baby from "../../../../assets/Animals/act1baby.webp";
 import act2baby from "../../../../assets/Animals/act2baby.webp";
 import exercisebaby from "../../../../assets/Animals/exercisebaby.webp";
 import activitybaby from "../../../../assets/Animals/activitybaby.webp";
+import Back from "../../../../components/Back";
 
 // Exercise Background
 import ExerciseLesson3 from "../../../../assets/Animals/ExerciseLesson3.webp";
@@ -98,6 +99,7 @@ function AnimalLesson3() {
   return (
     <>
       <div className="relative w-full min-h-screen overflow-y-auto">
+        <Back/>
         <img
           src="/Bg/mainvidbg.webp"
           alt="Main background"

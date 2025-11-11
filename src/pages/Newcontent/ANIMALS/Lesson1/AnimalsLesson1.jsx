@@ -20,6 +20,7 @@ import pigoink from "../../../../assets/Sounds/pigoink.mp3";
 
 import SoundVideo from "../../../../assets/Animals/ExerciseVideo/Animal Sounds Lesson 1.mp4";
 import api from "../../../../api";
+import Back from "../../../../components/Back";
 
 function AnimalLesson1() {
   const [clicked, setClicked] = useState(false);
@@ -147,6 +148,7 @@ const playSound = (soundFile) => {
       {/* 🟢 Main Page Section */}
       <div className="relative w-full min-h-screen overflow-y-auto">
         {/* Background */}
+        <Back/>
         <img
           src="/Bg/mainvidbg.webp"
           alt="Main background"

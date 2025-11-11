@@ -7,7 +7,7 @@ import pet from "../../../assets/Animals/pet.webp";
 import sound from "../../../assets/Animals/sound.webp";
 import { useEffect, useState } from "react";
 import api from "../../../api";
-import Book1 from "../../../assets/Stories/Story1.webp"
+import Back from "../../../components/Back";
 
 function Animals() {
   const [completedGames, setCompletedGames] = useState({});
@@ -70,6 +70,7 @@ function Animals() {
       </Helmet>
 
       <div className="relative w-full min-h-screen">
+      <Back/>
         <img
           src="/Bg/animallessonbg.webp"
           alt="background"

@@ -9,6 +9,7 @@ import weather from "../assets/Lessons/weather.webp";
 import senses from "../assets/Lessons/senses.webp";
 import reading from "../assets/Lessons/reading.webp";
 
+
 function Lessons() {
   const [weatherUnlocked, setWeatherUnlocked] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -52,6 +53,7 @@ function Lessons() {
       </Helmet>
 
       <div className="relative w-full min-h-screen">
+        <Back/>
         <img
           src="/Bg/lessonbg.webp"
           alt="background"

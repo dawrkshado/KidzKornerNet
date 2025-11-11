@@ -41,7 +41,7 @@ function StudentFilesPage() {
       </div>
       <div className="mt-2 md:mt-0 flex items-center gap-2">
         <a
-      /*href={f.file ? `http://127.0.0.1:8000${f.file}` : f.link}*/ href={f.file ? `api.kidzkorner.site${f.file}` : f.link}
+      /*href={f.file ? `http://127.0.0.1:8000${f.file}` : f.link}*/ href={f.file ? `https://api.kidzkorner.site${f.file}` : f.link}
   target="_blank"
   rel="noreferrer"
   className="text-blue-600 underline"

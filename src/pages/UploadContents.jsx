@@ -36,6 +36,15 @@ function TeacherUploadPage() {
       return;
     }
 
+    const maxSizeMB = 10;
+    const maxSizeBytes = maxSizeMB * 1024 * 1024;
+
+  if (selectedFile.size > maxSizeBytes) {
+    alert(`File size exceeds ${maxSizeMB} MB limit. Please choose a smaller file.`);
+    e.target.value = null;
+    return;
+  }
+
     setFile(selectedFile);
     setLink(""); // clear link if user selects a file
   };
@@ -94,8 +103,8 @@ function TeacherUploadPage() {
     <>
       <div className="p-6 flex justify-center">
         <Back />
-        <div className="h-[50vh] w-[50w]">
-          <h2 className="text-2xl font-bold mb-4">Upload a File or Link</h2>
+        <div className="h-[100vh] w-[70vw] bg-amber-200 rounded-2xl shadow-2xl p-6 mt-6 overflow-y-auto">
+          <h2 className="text-2xl font-bold mb-4">Upload a File or Link <br /> <span className="text-red-500 text-lg">Note: Can only post files 10MB or lower</span> </h2>
 
           <input
             type="text"
@@ -105,8 +114,8 @@ function TeacherUploadPage() {
             className="border px-2 py-1 rounded mr-3 mb-2"
           />
 
-          <div className="mb-2">
-            <input type="file" onChange={handleFileChange} className="mr-3" />
+          <div className="mb-2 hover:cursor-pointer w-fit">
+            <input type="file"  onChange={handleFileChange} className="mr-3 hover:cursor-pointer" />
           </div>
 
           <div className="mb-4">
@@ -122,7 +131,7 @@ function TeacherUploadPage() {
 
           <button
             onClick={handleUpload}
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:scale-110 transition-transform"
           >
             Upload
           </button>
@@ -130,31 +139,32 @@ function TeacherUploadPage() {
           <h3 className="text-xl font-bold mt-8 mb-4">Your Uploads</h3>
          <ul className="space-y-4">
   {uploads.map((f) => (
-    <li key={f.id} className="border p-3 rounded flex flex-col md:flex-row md:items-center md:justify-between">
+    <li key={f.id} className="border p-3 rounded flex flex-col md:flex-row md:items-center md:justify-between ">
       <div>
         <strong>{f.title}</strong>
         <p className="text-sm text-gray-600">By: {f.uploader_name}</p>
+        <p className="text-sm text-gray-600">Uploaded: {f.uploaded_at}</p>
         {/* Indicator */}
         <span
-          className={`inline-block px-2 py-1 text-xs font-semibold rounded ${
+          className={`inline-block px-2 py-1 text-xs font-semibold rounded  ${
             f.file ? "bg-green-200 text-green-800" : "bg-yellow-200 text-yellow-800"
           }`}
         >
           {f.file ? "File" : "Link"}
         </span>
       </div>
-      <div className="mt-2 md:mt-0 flex items-center gap-2">
+      <div className="mt-2 md:mt-0 flex items-center gap-2 h">
         <a
     /*href={f.file ? `http://127.0.0.1:8000${f.file}` : f.link}*/ href={f.file ? `https://api.kidzkorner.site${f.file}` : f.link}
   target="_blank"
   rel="noreferrer"
-  className="text-blue-600 underline"
+  className="text-blue-600 underline hover:text-blue-400"
 >
   {f.file ? "Download File" : "View Link"}
 </a>
         <button
           onClick={() => handleDelete(f.id)}
-          className="bg-red-500 text-white px-3 py-1 rounded"
+          className="bg-red-500 text-white px-3 py-1 rounded hover:scale-110 transition-transform"
         >
           Delete
         </button>

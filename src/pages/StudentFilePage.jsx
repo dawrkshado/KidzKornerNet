@@ -30,6 +30,7 @@ function StudentFilesPage() {
       <div>
         <strong>{f.title}</strong>
         <p className="text-sm text-gray-600">By: {f.uploader_name}</p>
+        <p className="text-sm text-gray-600">Uploaded at: {f.uploaded_at}</p>
         {/* Indicator */}
         <span
           className={`inline-block px-2 py-1 text-xs font-semibold rounded ${

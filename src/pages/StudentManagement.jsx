@@ -4,8 +4,6 @@ import api from '../api';
 
 function StudentManagement(){
     
-
-
     return(
         <div className="hidden md:inline md:absolute   overflow-x-hidden">
             <Back/>

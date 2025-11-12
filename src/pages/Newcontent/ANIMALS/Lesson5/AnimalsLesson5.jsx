@@ -17,6 +17,8 @@ import wildBg from "../../../../assets/Animals/ExercisePet/wildanimals.webp";
 // ✅ Fixed the video import path (4 levels up)
 import animalpetvid from "../../../../assets/Animals/ExerciseVideo/animalpetvid.mp4";
 import api from "../../../../api";
+import ScoreIndication from "../../../../assets/Animals/ScoreIndication.webp";
+import ScoreIndicationSmall from "../../../../assets/Animals/score star smallerScreen.webp";
 
 function AnimalLesson5() {
   const [clicked, setClicked] = useState();
@@ -175,6 +177,12 @@ function AnimalLesson5() {
           className="fixed inset-0 z-50 flex flex-col justify-center items-center gap-10 bg-cover bg-center"
           style={{ backgroundImage: `url("/Bg/activitybg.webp")` }}
         >
+          <div>
+            <img src={ScoreIndication} alt="image of an indication of scoring" className="h-60 lg:hidden xl:h-70 2xl:h-90  2xl:inline absolute left-0 bottom-0" />
+          </div>
+          <div>
+            <img src={ScoreIndicationSmall} alt="image of an indication of scoring" className="h-185 2xl:hidden 2xl:h-100 absolute left-5 bottom-0" />
+          </div>
           <div
             onClick={handleExit}
             className="bg-red-600 absolute right-[3%] top-[3%] h-10 w-10 rounded-4xl flex items-center justify-center cursor-pointer"

@@ -41,6 +41,8 @@ import api from "../../../../api";
 import useSound from "use-sound";
 import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
 
+import TimesUp from "../../../../assets/Animals/Time's Up.webp";
+
 const PROGRESS_KEY = "alphabetMediumProgress";
 function saveProgress(level) {
   const progress = JSON.parse(localStorage.getItem(PROGRESS_KEY)) || { level1: false, level2: false };
@@ -197,7 +199,7 @@ function AnimalsLessonActivity1() {
     Boolean(dropped["sheep"]) &&
     Boolean(dropped["cat"]) &&
     Boolean(dropped["chicken"]) &&
-    Boolean(dropped["cow"]);
+    Boolean(dropped["cow"]) || count >= 60;
 
   // Background music
   useEffect(() => {
@@ -292,7 +294,7 @@ function AnimalsLessonActivity1() {
         className="flex h-[100vh] w-[100vw] [&>*]:flex absolute font-[coiny] overflow-hidden bg-cover bg-no-repeat"
         style={{ backgroundImage: `url(${BG})` }}
       >
-        <div className="absolute top-0 right-0 text-white">Your Time: {count}</div>
+        <div className="absolute top-10 right-10 text-black text-5xl 2xl:text-7xl">Time: {count}</div>
 
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} collisionDetection={pointerWithin}>
           {/* Droppables */}
@@ -351,33 +353,60 @@ function AnimalsLessonActivity1() {
             )}
           </div>
 
-          {/* Results / stars overlays */}
-          {isGameFinished && count <= 15 && (
-            <div className="absolute inset-0 flex items-center h-full w-full justify-center bg-opacity-50 z-20">
-              <motion.img src={ThreeStar} alt="Three stars" className="h-[300px]" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.8, ease: "easeOut" }} />
-              <div className="absolute bottom-[20%] ">
-                <ReplayNBack onReplay={handleReplay} onBack={handleBack} />
+         {/* Results */}
+            {isGameFinished && count <= 15 && (
+              <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 z-20">
+                <motion.img
+                  src={ThreeStar}
+                  alt="Game Completed!"
+                  className="h-[300px]"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
+                <div className="absolute bottom-[20%]"><ReplayNBack onReplay={handleReplay} onBack={handleBack} /></div>
               </div>
-            </div>
-          )}
+            )}
+            {isGameFinished && count <= 30 && count > 15 && (
+              <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 z-20">
+                <motion.img
+                  src={TwoStar}
+                  alt="Game Completed!"
+                  className="h-[300px]"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
+                <div className="absolute bottom-[20%]"><ReplayNBack onReplay={handleReplay} onBack={handleBack} /></div>
+              </div>
+            )}
+            {isGameFinished && count > 30 && count != 60 && (
+              <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 z-20">
+                <motion.img
+                  src={OneStar}
+                  alt="Game Completed!"
+                  className="h-[300px]"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
+                <div className="absolute bottom-[20%]"><ReplayNBack onReplay={handleReplay} onBack={handleBack} /></div>
+              </div>
+            )}
 
-          {isGameFinished && count <= 20 && count > 15 && (
-            <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 z-20">
-              <motion.img src={TwoStar} alt="Two stars" className="h-[300px]" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.8, ease: "easeOut" }} />
-              <div className="absolute bottom-[20%] ">
-                <ReplayNBack onReplay={handleReplay} onBack={handleBack} />
+            {isGameFinished && count === 60 && (
+              <div className="absolute inset-0 top-60 2xl:top-0 flex items-center justify-center bg-opacity-50 z-20">
+                <motion.img
+                  src={TimesUp}
+                  alt="Game Completed!"
+                  className="h-[500px] bottom-53 2xl:bottom-90 absolute"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
+                <div className="absolute bottom-[20%]"><ReplayNBack onReplay={handleReplay} onBack={handleBack} /></div>
               </div>
-            </div>
-          )}
-
-          {isGameFinished && count > 20 && (
-            <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 z-20">
-              <motion.img src={OneStar} alt="One star" className="h-[300px]" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.8, ease: "easeOut" }} />
-              <div className="absolute bottom-[20%] ">
-                <ReplayNBack onReplay={handleReplay} onBack={handleBack} />
-              </div>
-            </div>
-          )}
+            )}
         </DndContext>
       </div>
     </>

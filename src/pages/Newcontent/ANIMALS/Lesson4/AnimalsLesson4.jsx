@@ -21,7 +21,8 @@ import pondbg from "../../../../assets/Animals/ExerciseHabitats/pondbg.webp";
 import savannabg from "../../../../assets/Animals/ExerciseHabitats/savannabg.webp";
 import api from "../../../../api";
 import animalhabitatvid from "../../../../assets/Animals/ExerciseVideo/animalhabitatvid.mp4";
-
+import ScoreIndication from "../../../../assets/Animals/ScoreIndication.webp";
+import ScoreIndicationSmall from "../../../../assets/Animals/score star smallerScreen.webp";
 function AnimalLesson4() {
   const [clicked, setClicked] = useState(false);
   const [clickedID, setClickedID] = useState(null);
@@ -188,6 +189,13 @@ function AnimalLesson4() {
           {/* Activities */}
           {clickedID === "Activities" && (
             <div className="flex flex-col items-center gap-10">
+              <div>
+                <img src={ScoreIndication} alt="image of an indication of scoring" className="h-60 lg:hidden xl:h-70 2xl:h-90  2xl:inline absolute left-0 bottom-0" />
+              </div>
+              <div>
+                <img src={ScoreIndicationSmall} alt="image of an indication of scoring" className="h-185 2xl:hidden 2xl:h-100 absolute left-5 bottom-0" />
+              </div>
+            
               <img
                 src={act1live}
                 alt="Activity 1"

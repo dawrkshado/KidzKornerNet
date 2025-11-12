@@ -26,6 +26,8 @@ import babychicken from "../../../../assets/Animals/ExerciseBaby/babychicken.web
 // ✅ Corrected video import path
 import animalbabyvid from "../../../../assets/Animals/ExerciseVideo/animalbabyvid.mp4";
 import api from "../../../../api";
+import ScoreIndication from "../../../../assets/Animals/ScoreIndication.webp";
+import ScoreIndicationSmall from "../../../../assets/Animals/score star smallerScreen.webp";
 
 function AnimalLesson3() {
   const [clicked, setClicked] = useState(false);
@@ -253,6 +255,14 @@ function AnimalLesson3() {
           className="fixed inset-0 z-50 flex flex-col justify-center items-center gap-0 bg-cover bg-center"
           style={{ backgroundImage: `url("/Bg/activitybg.webp")` }}
         >
+
+          <div>
+            <img src={ScoreIndication} alt="image of an indication of scoring" className="h-60 lg:hidden xl:h-70 2xl:h-90  2xl:inline absolute left-0 bottom-0" />
+          </div>
+          <div>
+            <img src={ScoreIndicationSmall} alt="image of an indication of scoring" className="h-185 2xl:hidden 2xl:h-100 absolute left-5 bottom-0" />
+          </div>
+
           {/* ❌ X Button */}
           <div
             onClick={handleExit}

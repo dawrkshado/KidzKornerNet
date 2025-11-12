@@ -15,6 +15,8 @@ import rabbitaction from "../../../../assets/Animals/ExerciseAction/rabbitaction
 import snakeaction from "../../../../assets/Animals/ExerciseAction/snakeaction.webp";
 import animalactionvid from "../../../../assets/Animals/ExerciseVideo/animalactionvid.mp4";
 import Back from "../../../../components/Back";
+import ScoreIndication from "../../../../assets/Animals/ScoreIndication.webp";
+import ScoreIndicationSmall from "../../../../assets/Animals/score star smallerScreen.webp";
 
 function AnimalLesson2() {
   const [clicked, setClicked] = useState(false);
@@ -207,7 +209,13 @@ function AnimalLesson2() {
           className="fixed inset-0 z-50 flex flex-col justify-center items-center gap-10 bg-cover bg-center"
           style={{ backgroundImage: `url("/Bg/activitybg.webp")` }}
         >
-          <div
+<div>
+  <img src={ScoreIndication} alt="image of an indication of scoring" className="h-60 lg:hidden xl:h-70 2xl:h-90  2xl:inline absolute left-0 bottom-0" />
+</div>
+<div>
+  <img src={ScoreIndicationSmall} alt="image of an indication of scoring" className="h-185 2xl:hidden 2xl:h-100 absolute left-5 bottom-0" />
+</div>
+<div
             onClick={handleExit}
             className="bg-red-600 absolute right-[3%] top-[3%] h-10 w-10 flex items-center justify-center rounded-full hover:cursor-pointer"
           >

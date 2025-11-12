@@ -20,8 +20,7 @@ import ReplayNBack from "../../../../components/ReplayNBack";
 import backgroundMusic from "../../../../assets/Sounds/background.mp3";
 
 import { motion, AnimatePresence } from "framer-motion";
-import MoveTutorial2 from "../../../../assets/videos/MoveTutorial2.mp4"; // ← your tutorial video path
-
+import MoveTutorial2 from "../../../../assets/videos/MoveTutorial2.mp4";
 import applause from "../../../../assets/Sounds/applause.wav";
 import { useWithSound } from "../../../../components/useWithSound";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +29,8 @@ import api from "../../../../api";
 
 import useSound from "use-sound";
 import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
+
+import TimesUp from "../../../../assets/Animals/Time's Up.webp";
 
 
 
@@ -106,9 +107,12 @@ function AnimalsLesson2Activity2() {
     }
   }
 
-  const isGameFinished = animals.every(a => dropped[a.id]);
 
-  const [count, setCount] = useState(0);
+
+  const [count, setCount] = useState(1);
+
+
+    const isGameFinished = animals.every(a => dropped[a.id]) || count >= 60;
 
   // — Tutorial pop-up logic
   const [showTutorial, setShowTutorial] = useState(true);
@@ -126,13 +130,14 @@ function AnimalsLesson2Activity2() {
   }, [showTutorial]);
 
   // Timer
-  useEffect(() => {
-    if (isGameFinished) return;
-    const interval = setInterval(() => {
-      setCount(prev => prev + 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [isGameFinished]);
+   useEffect(() => {
+   if (showTutorial || isGameFinished) return;
+     if (isGameFinished) return;
+     const interval = setInterval(() => {
+       setCount((prev) => prev + 1);
+     }, 1000);
+     return () => clearInterval(interval);
+   }, [showTutorial, isGameFinished]);
 
   // Finish logic
   useEffect(() => {
@@ -147,7 +152,7 @@ function AnimalsLesson2Activity2() {
 
   const resetGame = () => { setDropped({}); setCount(0); setShowTutorial(true); };
   const handleReplay = () => { stopApplause(); resetGame(); };
-  const handleBack = () => { stopApplause(); navigate("/shapes"); };
+  const handleBack = () => { stopApplause(); };
 
   useEffect(() => {
   if (isGameFinished && childId) {
@@ -208,7 +213,7 @@ function AnimalsLesson2Activity2() {
       {/* Main Game Screen */}
       {!showTutorial && (
         <div className="flex h-[100vh] w-[100vw] font-[coiny] overflow-hidden bg-cover bg-no-repeat" style={{ backgroundImage: `url(${BG})` }}>
-          <div className="absolute top-0 right-0 text-white">Your Time: {count}</div>
+          <div className="absolute top-10 right-10 text-black text-5xl 2xl:text-7xl">Time: {count}</div>
 
           <DndContext onDragEnd={handleDragEnd} collisionDetection={pointerWithin}>
             {/* Draggables */}
@@ -240,9 +245,9 @@ function AnimalsLesson2Activity2() {
               />
             </div>
 
-            {/* Results */}
+           {/* Results */}
             {isGameFinished && count <= 15 && (
-              <div className="absolute inset-0 flex items-center h-full w-full justify-center bg-opacity-50 z-20">
+              <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 z-20">
                 <motion.img
                   src={ThreeStar}
                   alt="Game Completed!"
@@ -251,12 +256,10 @@ function AnimalsLesson2Activity2() {
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
                 />
-                <div className="absolute bottom-[20%]">
-                  <ReplayNBack onReplay={handleReplay} onBack={handleBack} />
-                </div>
+                <div className="absolute bottom-[20%]"><ReplayNBack onReplay={handleReplay} onBack={handleBack} /></div>
               </div>
             )}
-            {isGameFinished && count > 15 && count <=20 && (
+            {isGameFinished && count <= 30 && count > 15 && (
               <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 z-20">
                 <motion.img
                   src={TwoStar}
@@ -266,12 +269,10 @@ function AnimalsLesson2Activity2() {
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
                 />
-                <div className="absolute bottom-[20%]">
-                  <ReplayNBack onReplay={handleReplay} onBack={handleBack} />
-                </div>
+                <div className="absolute bottom-[20%]"><ReplayNBack onReplay={handleReplay} onBack={handleBack} /></div>
               </div>
             )}
-            {isGameFinished && count > 20 && (
+            {isGameFinished && count > 30 && count != 60 && (
               <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 z-20">
                 <motion.img
                   src={OneStar}
@@ -281,9 +282,21 @@ function AnimalsLesson2Activity2() {
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
                 />
-                <div className="absolute bottom-[20%]">
-                  <ReplayNBack onReplay={handleReplay} onBack={handleBack} />
-                </div>
+                <div className="absolute bottom-[20%]"><ReplayNBack onReplay={handleReplay} onBack={handleBack} /></div>
+              </div>
+            )}
+
+            {isGameFinished && count === 60 && (
+              <div className="absolute inset-0 top-60 2xl:top-0 flex items-center justify-center bg-opacity-50 z-20">
+                <motion.img
+                  src={TimesUp}
+                  alt="Game Completed!"
+                  className="h-[500px] bottom-53 2xl:bottom-90 absolute"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
+                <div className="absolute bottom-[20%]"><ReplayNBack onReplay={handleReplay} onBack={handleBack} /></div>
               </div>
             )}
           </DndContext>

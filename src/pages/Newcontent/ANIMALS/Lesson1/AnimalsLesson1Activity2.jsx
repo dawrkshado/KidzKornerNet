@@ -30,6 +30,8 @@ import SoundTutorial from "../../../../assets/videos/SoundTutorial2.mp4";
 
 import api from "../../../../api";
 
+import TimesUp from "../../../../assets/Animals/Time's Up.webp";
+
 // Define rounds
 const ROUNDS = [
   { shadow: DuckShadow, answer: "Duck", choices: ["Duck", "Dog", "Pig", "Cat"] },
@@ -41,11 +43,19 @@ const ROUNDS = [
 
 
 function AnimalsLesson1Activity2() {
+
+
   const [playClick] = useSound(clickSfx, { volume: 0.5 });
   const navigate = useNavigate();
   const { playSound: playApplause, stopSound: stopApplause } = useWithSound(applause);
 
-
+   const handleReplay = () => {
+    stopApplause();
+    resetGame();
+  };
+    const handleBack = () => {
+    stopApplause();
+  };
 
   // 🔊 add animal sounds
   const [playCat] = useSound(catSound, { volume: 0.7 });
@@ -57,7 +67,7 @@ function AnimalsLesson1Activity2() {
   const [roundIndex, setRoundIndex] = useState(0);
   const [isGameFinished, setGameFinished] = useState(false);
   const [showWrong, setShowWrong] = useState(false);
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
   const [showTutorial, setShowTutorial] = useState(true);
   const handleVideoEnd = () => setShowTutorial(false);
   const handleSkip = () => setShowTutorial(false);
@@ -78,14 +88,25 @@ function AnimalsLesson1Activity2() {
 
  
 
-  useEffect(() => {
-      if (showTutorial) return;  // don’t count time during tutorial
-      if (isGameFinished) return;
-      const interval = setInterval(() => {
-        setCount(prev => prev + 1);
-      }, 1000);
-      return () => clearInterval(interval);
-    }, [isGameFinished, showTutorial]);
+useEffect(() => {
+  if (showTutorial || isGameFinished) return;
+
+  const interval = setInterval(() => {
+    
+    setCount((prev) => {
+      if (prev >= 60) {
+        // stop game at 60 seconds
+        clearInterval(interval);
+        setGameFinished(true);
+        playApplause();
+        return prev; // stop incrementing
+      }
+      return prev + 1;
+    });
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [showTutorial, isGameFinished]);
 
   const handleChoice = (choice) => {
     if (choice === currentRound.answer) {
@@ -173,7 +194,7 @@ function AnimalsLesson1Activity2() {
     >
       {!isGameFinished && (
         <>
-          <div className="absolute top-0 right-0 text-white text-xl">Time: {count}</div>
+          <div className="absolute top-10 right-10 text-black text-5xl 2xl:text-7xl">Time: {count}</div>
 
           {/* ✅ Clickable silhouette with sound */}
           <div className="flex justify-center mb-10">
@@ -190,7 +211,7 @@ function AnimalsLesson1Activity2() {
               <button
                 key={choice}
                 onClick={() => handleChoice(choice)}
-                className={`px-6 py-3 2xl:h-20 2xl:w-50 2xl:text-4xl rounded-lg bg-white text-black font-bold hover:bg-gray-200 transition ${
+                className={`px-6 py-3 h-15 text-xl 2xl:h-20 2xl:w-50 2xl:text-4xl rounded-lg bg-white text-black font-bold hover:bg-gray-200 transition ${
                   showWrong && choice !== currentRound.answer ? "animate-shake bg-red-300" : ""
                 }`}
               >
@@ -201,21 +222,60 @@ function AnimalsLesson1Activity2() {
         </>
       )}
 
-      {isGameFinished && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-opacity-50">
-          <motion.img
-            src={count <= 10 ? ThreeStar : count <= 15 ? TwoStar : OneStar}
-            alt="Game Completed!"
-            className="h-[300px]"
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          />
-          <div className="absolute bottom-[20%]">
-                <ReplayNBack />
+        {/* Results */}
+            {isGameFinished && count <= 15 && (
+              <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 z-20">
+                <motion.img
+                  src={ThreeStar}
+                  alt="Game Completed!"
+                  className="h-[300px]"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
+                <div className="absolute bottom-[20%]"><ReplayNBack onReplay={handleReplay} onBack={handleBack} /></div>
               </div>
-        </div>
-      )}
+            )}
+            {isGameFinished && count <= 30 && count > 15 && (
+              <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 z-20">
+                <motion.img
+                  src={TwoStar}
+                  alt="Game Completed!"
+                  className="h-[300px]"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
+                <div className="absolute bottom-[20%]"><ReplayNBack onReplay={handleReplay} onBack={handleBack} /></div>
+              </div>
+            )}
+            {isGameFinished && count > 30 && count != 60 && (
+              <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 z-20">
+                <motion.img
+                  src={OneStar}
+                  alt="Game Completed!"
+                  className="h-[300px]"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
+                <div className="absolute bottom-[20%]"><ReplayNBack onReplay={handleReplay} onBack={handleBack} /></div>
+              </div>
+            )}
+
+            {isGameFinished && count === 60 && (
+              <div className="absolute inset-0 top-60 2xl:top-0 flex items-center justify-center bg-opacity-50 z-20">
+                <motion.img
+                  src={TimesUp}
+                  alt="Game Completed!"
+                  className="h-[500px] bottom-53 2xl:bottom-90 absolute"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                />
+                <div className="absolute bottom-[20%]"><ReplayNBack onReplay={handleReplay} onBack={handleBack} /></div>
+              </div>
+            )}
     </div>
   </>);
 }

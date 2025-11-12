@@ -38,6 +38,7 @@ import pigSound from "../../../../assets/Sounds/pigoink.mp3";             // kee
 import duckSound from "../../../../assets/Animals/Lesson2/duckSound.mp3";
 import api from "../../../../api";
 import TimesUp from "../../../../assets/Animals/Time's Up.webp";
+import TimesUpSound from "../../../../assets/Sounds/Time'sUP.mp3";
 
 import SoundTutorial from "../../../../assets/videos/SoundTutorial1.mp4";  // ← your tutorial video path
 import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
@@ -79,11 +80,10 @@ function Draggable({ id, disabled = false, shape }) {
 function AnimalsLessonActivity1() {
     const navigate = useNavigate();
   const { playSound: playApplause, stopSound: stopApplause } = useWithSound(applause);
+  const { playSound: playTimeUp, stopSound: stopTimeUp } = useWithSound(TimesUpSound);
   const [dropped, setDropped] = useState({});
   const [count, setCount] = useState(1);
   const [playWrong] = useSound(wrongSound, { volume: 1.0 });
-
-
 
   
   const selectedChild = JSON.parse(localStorage.getItem("selectedChild"));
@@ -177,9 +177,19 @@ function AnimalsLessonActivity1() {
 }, [isGameFinished, playApplause, stopApplause]);
 
 
+useEffect(() => {
+  if (
+    count === 60 &&
+    !(dropped["arf"] && dropped["meow"] && dropped["moo"] && dropped["oink"] && dropped["quack"])
+  ) {
+    stopApplause(); 
+    playTimeUp();   
+  }
+}, [count, dropped, stopApplause, playTimeUp]);
 
 
-  useEffect(() => {
+
+    useEffect(() => {
     if (showTutorial) return;  
     if (isGameFinished) return;
     if (showReady) return;
@@ -188,6 +198,7 @@ function AnimalsLessonActivity1() {
     }, 1000);
     return () => clearInterval(interval);
   }, [isGameFinished, showTutorial, showReady]);
+
 
   const resetGame = () => {
     setDropped({});
@@ -201,6 +212,7 @@ function AnimalsLessonActivity1() {
   const handleBack = () => {
     stopApplause();
     navigate("/shapes");
+    stopTimeUp();
   };
 
   useEffect(() => {

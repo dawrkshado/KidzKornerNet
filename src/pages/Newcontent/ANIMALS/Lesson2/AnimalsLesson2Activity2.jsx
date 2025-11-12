@@ -30,6 +30,7 @@ import useSound from "use-sound";
 import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
 import TimesUp from "../../../../assets/Animals/Time's Up.webp";
 import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
+import TimesUpSound from "../../../../assets/Sounds/Time'sUP.mp3";
 
 
 function Droppable({ id, placedShape, shape }) {
@@ -169,14 +170,6 @@ function AnimalsLesson2Activity2() {
     return () => { clearTimeout(soundTimeout); stopApplause(); };
   }, [isGameFinished, playApplause, stopApplause]);
 
-  useEffect(() => {
-  if (showTutorial || isGameFinished || showReady) return;
-    if (isGameFinished) return;
-    const interval = setInterval(() => {
-      setCount((prev) => prev + 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [showTutorial, isGameFinished, showReady]);
 
 
   useEffect(() => {
@@ -202,6 +195,18 @@ function AnimalsLesson2Activity2() {
     saveRecord();
   }
 }, [isGameFinished, childId, count]);
+
+
+useEffect(() => {
+  if (count === 60 && !(
+    dropped["arf"] && dropped["meow"] && dropped["moo"] && dropped["oink"] && dropped["quack"]
+  )) {
+    stopApplause(); // stop applause if any
+    const timeUpAudio = new Audio(TimesUpSound);
+    timeUpAudio.volume = 1.0;
+    timeUpAudio.play().catch(err => console.log("Autoplay blocked:", err));
+  }
+}, [count, dropped, stopApplause]);
 
   return (
     <>

@@ -32,6 +32,7 @@ import api from "../../../../api";
 
 import TimesUp from "../../../../assets/Animals/Time's Up.webp";
 import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
+import TimesUpSound from "../../../../assets/Sounds/Time'sUP.mp3";
 
 // Define rounds
 const ROUNDS = [
@@ -45,10 +46,10 @@ const ROUNDS = [
 
 function AnimalsLesson1Activity2() {
 
-
   const [playClick] = useSound(clickSfx, { volume: 0.5 });
   const navigate = useNavigate();
   const { playSound: playApplause, stopSound: stopApplause } = useWithSound(applause);
+  const { playSound: playTimeUp, stopSound: stopTimeUp } = useWithSound(TimesUpSound);
 
    const handleReplay = () => {
     stopApplause();
@@ -56,6 +57,7 @@ function AnimalsLesson1Activity2() {
   };
     const handleBack = () => {
     stopApplause();
+    stopTimeUp();
   };
 
   // 🔊 add animal sounds
@@ -100,7 +102,6 @@ useEffect(() => {
         // stop game at 60 seconds
         clearInterval(interval);
         setGameFinished(true);
-        playApplause();
         return prev; // stop incrementing
       }
       return prev + 1;
@@ -159,6 +160,20 @@ useEffect(() => {
     saveRecord();
   }
 }, [isGameFinished, childId, count]);
+
+
+
+useEffect(() => {
+  if (count === 60) {
+    stopApplause();
+
+    // Wait a short moment before playing sound, 
+    // so "Time's Up" image shows first
+    setTimeout(() => {
+      playTimeUp();
+    }, 500); // adjust delay if needed
+  }
+}, [count, stopApplause, playTimeUp]);
 
 
 

@@ -34,6 +34,8 @@ import useSound from "use-sound";
 import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
 import TimesUp from "../../../../assets/Animals/Time's Up.webp";
 import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
+import TimesUpSound from "../../../../assets/Sounds/Time'sUP.mp3";
+
 
 
 function Droppable({ id, placedShape, shape }) {
@@ -93,6 +95,7 @@ function AnimalsLesson2Activity1() {
   const [playWrong] = useSound(wrongSound, { volume: 1.0 });
   const navigate = useNavigate();
   const { playSound: playApplause, stopSound: stopApplause } = useWithSound(applause);
+  const { playSound: playTimeUp, stopSound: stopTimeUp } = useWithSound(TimesUpSound);
   const [dropped, setDropped] = useState({});
   const [count, setCount] = useState(1);
   const [showReady, setShowReady] = useState(false);
@@ -178,6 +181,7 @@ function AnimalsLesson2Activity1() {
 
   const handleBack = () => {
     stopApplause();
+    stopTimeUp();
   };
 
   const isPlaced = (id) => dropped[id] === id;
@@ -223,6 +227,28 @@ function AnimalsLesson2Activity1() {
     saveRecord();
   }
 }, [isGameFinished, childId, count]);
+
+useEffect(() => {
+  if (
+    count === 60 &&
+    !(dropped["arf"] && dropped["meow"] && dropped["moo"] && dropped["oink"] && dropped["quack"])
+  ) {
+    stopApplause(); 
+    playTimeUp();   
+  }
+}, [count, dropped, stopApplause, playTimeUp]);
+
+
+useEffect(() => {
+  if (count === 60 && !(
+    dropped["arf"] && dropped["meow"] && dropped["moo"] && dropped["oink"] && dropped["quack"]
+  )) {
+    stopApplause(); // stop applause if any
+    const timeUpAudio = new Audio(TimesUpSound);
+    timeUpAudio.volume = 1.0;
+    timeUpAudio.play().catch(err => console.log("Autoplay blocked:", err));
+  }
+}, [count, dropped, stopApplause]);
 
   return (
     <>

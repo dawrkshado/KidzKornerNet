@@ -22,6 +22,8 @@ import api from "../../../../api";
 import useSound from "use-sound";
 import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
 
+import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
+
 // Activate tutorial video import
 import TutorialVideo from "../../../../assets/videos/Pet or Wild act1 Tutorial.mp4";
 import TimesUp from "../../../../assets/Animals/Time's Up.webp";
@@ -82,6 +84,7 @@ function AnimalsLesson5Activity1() {
   const selectedChild = JSON.parse(localStorage.getItem("selectedChild"));
   const childId = selectedChild?.id; // this is the child ID you need
   const [playWrong] = useSound(wrongSound, { volume: 1.0 });
+  const [showReady, setShowReady] = useState(false);
 
   const animalTypes = {
     dog: "pet",
@@ -136,13 +139,16 @@ function AnimalsLesson5Activity1() {
     };
   }, [isGameFinished, playApplause, stopApplause]);
 
-  useEffect(() => {
+  // Timer
+   useEffect(() => {
+  if (showTutorial || isGameFinished || showReady) return;
     if (isGameFinished) return;
     const interval = setInterval(() => {
       setCount((prev) => prev + 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [isGameFinished]);
+  }, [showTutorial, isGameFinished, showReady]);
+
 
   const resetGame = () => {
     setDropped([]);
@@ -154,6 +160,21 @@ function AnimalsLesson5Activity1() {
     stopApplause();
     resetGame();
   };
+
+  
+  const handleSkipTutorial = () => {
+    setShowTutorial(false);
+    setShowReady(true);
+  };
+  const handleTutorialEnd = () => {
+    setShowTutorial(false);
+    setShowReady(true);
+  };
+
+    const handleReadyEnd = () => {
+  setShowReady(false);
+};
+
 
   const handleBack = () => {
     stopApplause();
@@ -199,17 +220,39 @@ function AnimalsLesson5Activity1() {
               <video
                 src={TutorialVideo}
                 autoPlay
-                onEnded={() => setShowTutorial(false)}
+                onEnded={handleTutorialEnd}
                 playsInline
                 className="w-full rounded-2xl border-4 border-white shadow-lg"
               />
               <button
-                onClick={() => setShowTutorial(false)}
+                onClick={handleSkipTutorial}
                 className="absolute top-4 right-4 bg-white/80 text-black font-semibold px-4 py-1 rounded-lg shadow hover:bg-white transition"
               >
                 Skip
               </button>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Ready Set Go Video Overlay */}
+      <AnimatePresence mode="wait">
+        {showReady && (
+          <motion.div
+            key="readysetgo"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-0 bg-black/80 flex justify-center items-center z-50"
+          >
+            <video
+              src={ReadySetGo}
+              autoPlay
+              onEnded={handleReadyEnd}
+              playsInline
+              className="rounded-2xl shadow-lg w-[70%] border-4 border-gray-200"
+            />
           </motion.div>
         )}
       </AnimatePresence>

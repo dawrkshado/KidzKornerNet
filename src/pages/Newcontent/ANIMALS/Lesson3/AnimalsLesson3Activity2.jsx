@@ -28,6 +28,7 @@ import KittenDialogue from "../../../../assets/Animals/Lesson3/KittenDialogue.we
 import PuppyDialogue from "../../../../assets/Animals/Lesson3/PuppyDialogue.webp";
 import ChickDialogue from "../../../../assets/Animals/Lesson3/ChickDialogue.webp";
 import api from "../../../../api";
+import BabyTutorial2 from "../../../../assets/videos/BabyTutorial2.mp4";
 
 // ✅ Baby animal sounds
 import babydog from "../../../../assets/Animals/ExerciseSound/babydog.mp3";
@@ -38,6 +39,8 @@ import babychicken from "../../../../assets/Animals/ExerciseSound/babychicken.mp
 import useSound from "use-sound";
 import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
 import TimesUp from "../../../../assets/Animals/Time's Up.webp";
+
+import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
 
 function Droppable({ id, placedShape, shape }) {
   const { isOver, setNodeRef } = useDroppable({ id });
@@ -78,8 +81,19 @@ function AnimalsLessonActivity2() {
   const selectedChild = JSON.parse(localStorage.getItem("selectedChild"));
   const childId = selectedChild?.id; // this is the child ID you need
   const [playWrong] = useSound(wrongSound, { volume: 1.0 });
+  const [showReady, setShowReady] = useState(false);
 
-  // ✅ One ref for all baby sounds
+
+  const [showTutorial, setShowTutorial] = useState(true);
+  const handleSkipTutorial = () => {
+    setShowTutorial(false);
+    setShowReady(true);
+  };
+    const handleReadyEnd = () => {
+  setShowReady(false);
+};
+
+    // One ref for all baby sounds
   const babySoundRef = useRef(null);
 
   function stopBabySound() {
@@ -143,6 +157,8 @@ function AnimalsLessonActivity2() {
     };
   }, []);
 
+  
+
   useEffect(() => {
     let soundTimeout;
     if (isGameFinished) {
@@ -157,10 +173,15 @@ function AnimalsLessonActivity2() {
   }, [isGameFinished, playApplause, stopApplause]);
 
   useEffect(() => {
+  if (showTutorial || isGameFinished || showReady) return;
     if (isGameFinished) return;
-    const interval = setInterval(() => setCount((prev) => prev + 1), 1000);
+    const interval = setInterval(() => {
+      setCount((prev) => prev + 1);
+    }, 1000);
     return () => clearInterval(interval);
-  }, [isGameFinished]);
+  }, [showTutorial, isGameFinished, showReady]);
+
+  
 
   const resetGame = () => {
     setDropped({});
@@ -206,6 +227,59 @@ function AnimalsLessonActivity2() {
 
   return (
     <>
+
+       {/* 🎥 Tutorial Pop-Up Video */}
+      <AnimatePresence mode="wait">
+        {showTutorial && (
+          <motion.div
+            key="tutorial"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="absolute inset-0 bg-black/80 flex justify-center items-center z-50"
+          >
+            <div className="relative w-[80%] md:w-[60%]">
+              <video
+                src={BabyTutorial2}
+                autoPlay
+                onEnded={() => setShowTutorial(false)}
+                playsInline
+                className="w-full rounded-2xl border-4 border-gray-200 shadow-lg"
+              />
+              <button
+                onClick={handleSkipTutorial}
+                className="absolute top-4 right-4 bg-white/80 text-black font-semibold px-4 py-1 rounded-lg shadow hover:bg-white transition"
+              >
+                Skip
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Ready Set Go Video Overlay */}
+      <AnimatePresence mode="wait">
+        {showReady && (
+          <motion.div
+            key="readysetgo"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-0 bg-black/80 flex justify-center items-center z-50"
+          >
+            <video
+              src={ReadySetGo}
+              autoPlay
+              onEnded={handleReadyEnd}
+              playsInline
+              className="rounded-2xl shadow-lg w-[70%] border-4 border-gray-200"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div
         className="flex h-[100vh] w-[100vw] [&>*]:flex absolute font-[coiny] overflow-hidden bg-bottom bg-cover bg-no-repeat"
         style={{ backgroundImage: `url(${BG})` }}

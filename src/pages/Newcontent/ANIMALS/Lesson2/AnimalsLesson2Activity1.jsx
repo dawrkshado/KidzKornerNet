@@ -33,6 +33,7 @@ import api from "../../../../api";
 import useSound from "use-sound";
 import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
 import TimesUp from "../../../../assets/Animals/Time's Up.webp";
+import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
 
 
 function Droppable({ id, placedShape, shape }) {
@@ -91,10 +92,10 @@ function AnimalsLesson2Activity1() {
   const childId = selectedChild?.id; // this is the child ID you need
   const [playWrong] = useSound(wrongSound, { volume: 1.0 });
   const navigate = useNavigate();
-  const { playSound: playApplause, stopSound: stopApplause } =
-    useWithSound(applause);
+  const { playSound: playApplause, stopSound: stopApplause } = useWithSound(applause);
   const [dropped, setDropped] = useState({});
   const [count, setCount] = useState(1);
+  const [showReady, setShowReady] = useState(false);
 
   
 
@@ -103,20 +104,23 @@ function AnimalsLesson2Activity1() {
     dropped["swims"] && dropped["hops"] && dropped["crawls"] && dropped["runs"] && dropped["fly"]  || count >= 60;
  
 
-
+  const handleReadyEnd = () => {
+  setShowReady(false);
+};
     
   // --- Tutorial pop-up logic ---
   const [showTutorial, setShowTutorial] = useState(true);
 
   const handleVideoEnd = () => {
     setShowTutorial(false);
+    setShowReady(true);
   };
 
   const handleSkip = () => {
     setShowTutorial(false);
+    setShowReady(true);
   };
 
-  
 
   // --- Background music setup for game (unchanged) ---
   useEffect(() => {
@@ -137,13 +141,13 @@ function AnimalsLesson2Activity1() {
   
   // --- Timer logic ---
   useEffect(() => {
-  if (showTutorial || isGameFinished) return;
+  if (showTutorial || isGameFinished || showReady) return;
     if (isGameFinished) return;
     const interval = setInterval(() => {
       setCount((prev) => prev + 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [showTutorial, isGameFinished]);
+  }, [showTutorial, isGameFinished, showReady]);
 
   // --- finish logic, sound etc (unchanged) ---
   useEffect(() => {
@@ -251,6 +255,28 @@ function AnimalsLesson2Activity1() {
           </motion.div>
         )}
       </AnimatePresence>
+
+       {/* Ready Set Go Video Overlay */}
+            <AnimatePresence mode="wait">
+              {showReady && (
+                <motion.div
+                  key="readysetgo"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                  className="absolute inset-0 bg-black/80 flex justify-center items-center z-50"
+                >
+                  <video
+                    src={ReadySetGo}
+                    autoPlay
+                    onEnded={handleReadyEnd}
+                    playsInline
+                    className="rounded-2xl shadow-lg w-[70%] border-4 border-gray-200"
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
 
       {/* Main Game Screen */}
       {!showTutorial && (

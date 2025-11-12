@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { DndContext, useDraggable, useDroppable, pointerWithin } from "@dnd-kit/core";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence} from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 import BG from "../../../../assets/Animals/Lesson3/bg1.webp";
@@ -42,6 +42,9 @@ import useSound from "use-sound";
 import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
 
 import TimesUp from "../../../../assets/Animals/Time's Up.webp";
+import BabyTutorial1 from "../../../../assets/videos/BabyTutorial1.mp4";
+
+import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
 
 const PROGRESS_KEY = "alphabetMediumProgress";
 function saveProgress(level) {
@@ -81,6 +84,14 @@ function AnimalsLessonActivity1() {
 
   const [dropped, setDropped] = useState({});
   const [count, setCount] = useState(1);
+  const [showReady, setShowReady] = useState(false);
+
+  const [showTutorial, setShowTutorial] = useState(true);
+
+  const handleSkipTutorial = () => {
+    setShowTutorial(false);
+    setShowReady(true);
+  };
 
   // audio refs for each baby sound
   const catAudioRef = useRef(null);
@@ -241,11 +252,15 @@ function AnimalsLessonActivity1() {
   }, [isGameFinished]);
 
   // Timer
-  useEffect(() => {
+ useEffect(() => {
+  if (showTutorial || isGameFinished || showReady) return;
     if (isGameFinished) return;
-    const interval = setInterval(() => setCount((prev) => prev + 1), 1000);
+    const interval = setInterval(() => {
+      setCount((prev) => prev + 1);
+    }, 1000);
     return () => clearInterval(interval);
-  }, [isGameFinished]);
+  }, [showTutorial, isGameFinished, showReady]);
+
 
   const resetGame = () => {
     stopCurrentAudioInternal();
@@ -262,6 +277,11 @@ function AnimalsLessonActivity1() {
     stopApplause();
     navigate("/shapes");
   };
+
+  const handleReadyEnd = () => {
+setShowReady(false);
+};
+
 
       useEffect(() => {
   if (isGameFinished && childId) {
@@ -290,10 +310,66 @@ function AnimalsLessonActivity1() {
 
   return (
     <>
+
+      {/* 🎥 Tutorial Pop-Up Video */}
+      <AnimatePresence mode="wait">
+        {showTutorial && (
+          <motion.div
+            key="tutorial"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="absolute inset-0 bg-black/80 flex justify-center items-center z-50"
+          >
+            <div className="relative w-[80%] md:w-[60%]">
+              <video
+                src={BabyTutorial1}
+                autoPlay
+                onEnded={() => setShowTutorial(false)}
+                playsInline
+                className="w-full rounded-2xl border-4 border-gray-200 shadow-lg"
+              />
+              <button
+                onClick={handleSkipTutorial}
+                className="absolute top-4 right-4 bg-white/80 text-black font-semibold px-4 py-1 rounded-lg shadow hover:bg-white transition"
+              >
+                Skip
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+
+       {/* Ready Set Go Video Overlay */}
+      <AnimatePresence mode="wait">
+        {showReady && (
+          <motion.div
+            key="readysetgo"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-0 bg-black/80 flex justify-center items-center z-50"
+          >
+            <video
+              src={ReadySetGo}
+              autoPlay
+              onEnded={handleReadyEnd}
+              playsInline
+              className="rounded-2xl shadow-lg w-[70%] border-4 border-gray-200"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div
         className="flex h-[100vh] w-[100vw] [&>*]:flex absolute font-[coiny] overflow-hidden bg-cover bg-no-repeat"
         style={{ backgroundImage: `url(${BG})` }}
       >
+
+
         <div className="absolute top-10 right-10 text-black text-5xl 2xl:text-7xl">Time: {count}</div>
 
         <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd} collisionDetection={pointerWithin}>

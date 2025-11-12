@@ -37,10 +37,11 @@ import dogSound from "../../../../assets/Animals/Lesson2/dogSound.mp3";  // adju
 import pigSound from "../../../../assets/Sounds/pigoink.mp3";             // keep correct path
 import duckSound from "../../../../assets/Animals/Lesson2/duckSound.mp3";
 import api from "../../../../api";
-
 import TimesUp from "../../../../assets/Animals/Time's Up.webp";
 
 import SoundTutorial from "../../../../assets/videos/SoundTutorial1.mp4";  // ← your tutorial video path
+import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
+
 
 function Droppable({ id, placedShape, shape }) {
   const { isOver, setNodeRef } = useDroppable({ id });
@@ -87,12 +88,24 @@ function AnimalsLessonActivity1() {
   
   const selectedChild = JSON.parse(localStorage.getItem("selectedChild"));
   const childId = selectedChild?.id; // this is the child ID you need
+  const [showReady, setShowReady] = useState(false);
 
 
   // Tutorial state
   const [showTutorial, setShowTutorial] = useState(true);
-  const handleVideoEnd = () => setShowTutorial(false);
-  const handleSkip = () => setShowTutorial(false);
+  const handleVideoEnd = () => {
+    setShowTutorial(false);
+    setShowReady(true);
+  }
+  const handleSkip = () => {
+    setShowTutorial(false);
+    setShowReady(true)
+  }
+
+  const handleReadyEnd = () => {
+  setShowReady(false);
+};
+
 
   function handleDragEnd(event) {
   if (event.over) {
@@ -167,13 +180,14 @@ function AnimalsLessonActivity1() {
 
 
   useEffect(() => {
-    if (showTutorial) return;  // don’t count time during tutorial
+    if (showTutorial) return;  
     if (isGameFinished) return;
+    if (showReady) return;
     const interval = setInterval(() => {
       setCount(prev => prev + 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [isGameFinished, showTutorial]);
+  }, [isGameFinished, showTutorial, showReady]);
 
   const resetGame = () => {
     setDropped({});
@@ -246,8 +260,31 @@ function AnimalsLessonActivity1() {
         )}
       </AnimatePresence>
 
+      {/* Ready Set Go Video Overlay */}
+<AnimatePresence mode="wait">
+  {showReady && (
+    <motion.div
+      key="readysetgo"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.8 }}
+      className="absolute inset-0 bg-black/80 flex justify-center items-center z-50"
+    >
+      <video
+        src={ReadySetGo}
+        autoPlay
+        onEnded={handleReadyEnd}
+        playsInline
+        className="rounded-2xl shadow-lg w-[70%] border-4 border-gray-200"
+      />
+    </motion.div>
+  )}
+</AnimatePresence>
+
+
       {/* Main Game Screen */}
-      {!showTutorial && (
+      {!showTutorial && !showReady && (
         <div className="flex h-[100vh] w-[100vw] font-[coiny] fixed overflow-hidden bg-cover bg-no-repeat"
              style={{ backgroundImage: `url(${BG})` }}>
           <div className="absolute top-10 right-10  text-black text-5xl 2xl:text-7xl">Time: {count}</div>

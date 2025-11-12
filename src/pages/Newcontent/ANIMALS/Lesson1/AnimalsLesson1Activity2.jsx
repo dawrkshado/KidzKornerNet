@@ -31,6 +31,7 @@ import SoundTutorial from "../../../../assets/videos/SoundTutorial2.mp4";
 import api from "../../../../api";
 
 import TimesUp from "../../../../assets/Animals/Time's Up.webp";
+import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
 
 // Define rounds
 const ROUNDS = [
@@ -69,11 +70,12 @@ function AnimalsLesson1Activity2() {
   const [showWrong, setShowWrong] = useState(false);
   const [count, setCount] = useState(1);
   const [showTutorial, setShowTutorial] = useState(true);
-  const handleVideoEnd = () => setShowTutorial(false);
-  const handleSkip = () => setShowTutorial(false);
+  const handleVideoEnd = () => {setShowTutorial(false);setShowReady(true);}
+  const handleSkip = () => {setShowTutorial(false); setShowReady(true);}
   const currentRound = ROUNDS[roundIndex];
   const selectedChild = JSON.parse(localStorage.getItem("selectedChild"));
   const childId = selectedChild?.id; // this is the child ID you need
+  const [showReady, setShowReady] = useState(false);
 
 
   // ✅ play sound based on current round
@@ -89,7 +91,7 @@ function AnimalsLesson1Activity2() {
  
 
 useEffect(() => {
-  if (showTutorial || isGameFinished) return;
+  if (showTutorial || isGameFinished || showReady) return;
 
   const interval = setInterval(() => {
     
@@ -106,7 +108,7 @@ useEffect(() => {
   }, 1000);
 
   return () => clearInterval(interval);
-}, [showTutorial, isGameFinished]);
+}, [showTutorial, isGameFinished, showReady]);
 
   const handleChoice = (choice) => {
     if (choice === currentRound.answer) {
@@ -123,6 +125,10 @@ useEffect(() => {
       setTimeout(() => setShowWrong(false), 800);
     }
   };
+
+    const handleReadyEnd = () => {
+  setShowReady(false);
+};
 
    useEffect(() => {
     if (isGameFinished) {
@@ -185,6 +191,28 @@ useEffect(() => {
                 Skip
               </button>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+        {/* Ready Set Go Video Overlay */}
+      <AnimatePresence mode="wait">
+        {showReady && (
+          <motion.div
+            key="readysetgo"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-0 bg-black/80 flex justify-center items-center z-50"
+          >
+            <video
+              src={ReadySetGo}
+              autoPlay
+              onEnded={handleReadyEnd}
+              playsInline
+              className="rounded-2xl shadow-lg w-[70%] border-4 border-gray-200"
+            />
           </motion.div>
         )}
       </AnimatePresence>

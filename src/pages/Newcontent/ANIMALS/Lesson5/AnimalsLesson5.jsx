@@ -19,6 +19,7 @@ import animalpetvid from "../../../../assets/Animals/ExerciseVideo/animalpetvid.
 import api from "../../../../api";
 import ScoreIndication from "../../../../assets/Animals/ScoreIndication.webp";
 import ScoreIndicationSmall from "../../../../assets/Animals/score star smallerScreen.webp";
+import TimesUpSound from "../../../../assets/Sounds/Time'sUP.mp3";
 
 function AnimalLesson5() {
   const [clicked, setClicked] = useState();

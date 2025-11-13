@@ -76,8 +76,8 @@ function saveProgress(level) {
 function AnimalsLesson2Activity2() {
   const selectedChild = JSON.parse(localStorage.getItem("selectedChild"));
   const childId = selectedChild?.id; // this is the child ID you need
-  const [showReady, setShowReady] = useState(false);
-
+  const [showReady, setShowReady] = useState(false);  
+  const { playSound: playTimeUp, stopSound: stopTimeUp } = useWithSound(TimesUpSound);
   const navigate = useNavigate();
   const { playSound: playApplause, stopSound: stopApplause } = useWithSound(applause);
   const [dropped, setDropped] = useState({});
@@ -133,8 +133,17 @@ function AnimalsLesson2Activity2() {
 
   const resetGame = () => { setDropped({}); setCount(0); setShowTutorial(true); };
   const handleReplay = () => { stopApplause(); resetGame(); };
-  const handleBack = () => { stopApplause(); };
+  const handleBack = () => { stopApplause();   stopTimeUp();};
 
+
+  useEffect(() => {
+  if (count === 60 && !(
+    animals.every(a => dropped[a.id])
+  )) {
+   stopApplause(); 
+    playTimeUp();  
+  }
+}, [count, dropped, stopApplause]);
 
   // Background music
   useEffect(() => {
@@ -197,16 +206,6 @@ function AnimalsLesson2Activity2() {
 }, [isGameFinished, childId, count]);
 
 
-useEffect(() => {
-  if (count === 60 && !(
-    dropped["arf"] && dropped["meow"] && dropped["moo"] && dropped["oink"] && dropped["quack"]
-  )) {
-    stopApplause(); // stop applause if any
-    const timeUpAudio = new Audio(TimesUpSound);
-    timeUpAudio.volume = 1.0;
-    timeUpAudio.play().catch(err => console.log("Autoplay blocked:", err));
-  }
-}, [count, dropped, stopApplause]);
 
   return (
     <>

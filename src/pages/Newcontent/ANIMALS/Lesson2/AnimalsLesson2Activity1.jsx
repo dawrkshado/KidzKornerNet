@@ -241,12 +241,10 @@ useEffect(() => {
 
 useEffect(() => {
   if (count === 60 && !(
-    dropped["arf"] && dropped["meow"] && dropped["moo"] && dropped["oink"] && dropped["quack"]
+    dropped["swims"] && dropped["hops"] && dropped["crawls"] && dropped["runs"] && dropped["fly"]
   )) {
-    stopApplause(); // stop applause if any
-    const timeUpAudio = new Audio(TimesUpSound);
-    timeUpAudio.volume = 1.0;
-    timeUpAudio.play().catch(err => console.log("Autoplay blocked:", err));
+   stopApplause(); 
+    playTimeUp();  
   }
 }, [count, dropped, stopApplause]);
 

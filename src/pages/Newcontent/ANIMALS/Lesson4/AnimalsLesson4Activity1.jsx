@@ -27,6 +27,7 @@ import SoundTutorial4 from "../../../../assets/videos/LiveTutorial1.mp4";  // â†
 import TimesUp from "../../../../assets/Animals/Time's Up.webp";
 
 import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
+import TimesUpSound from "../../../../assets/Sounds/Time'sUP.mp3";
 
 
 
@@ -89,6 +90,7 @@ function AnimalsLesson4Activity1() {
   const [playWrong] = useSound(wrongSound, { volume: 1.0 });
   const acceptedAnimals = ["monkey", "giraffe", "lion"];
   const [showReady, setShowReady] = useState(false);
+  const { playSound: playTimeUp, stopSound: stopTimeUp } = useWithSound(TimesUpSound);
 
   function handleDragEnd(event) {
     if (event.over) {
@@ -213,6 +215,18 @@ function AnimalsLesson4Activity1() {
     saveRecord();
   }
 }, [isGameFinished, childId, count]);
+
+
+useEffect(() => {
+  if (count === 60 && !(
+    dropped.length === 3
+  )) {
+   stopApplause(); 
+    playTimeUp();  
+  }
+}, [count, dropped, stopApplause]);
+
+
 
   return (
     <>

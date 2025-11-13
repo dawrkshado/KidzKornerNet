@@ -23,6 +23,7 @@ import useSound from "use-sound";
 import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
 
 import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
+import TimesUpSound from "../../../../assets/Sounds/Time'sUP.mp3";
 
 // Activate tutorial video import
 import TutorialVideo from "../../../../assets/videos/Pet or Wild act1 Tutorial.mp4";
@@ -85,6 +86,7 @@ function AnimalsLesson5Activity1() {
   const childId = selectedChild?.id; // this is the child ID you need
   const [playWrong] = useSound(wrongSound, { volume: 1.0 });
   const [showReady, setShowReady] = useState(false);
+  const { playSound: playTimeUp, stopSound: stopTimeUp } = useWithSound(TimesUpSound);
 
   const animalTypes = {
     dog: "pet",
@@ -178,6 +180,7 @@ function AnimalsLesson5Activity1() {
 
   const handleBack = () => {
     stopApplause();
+    stopTimeUp();
   };
     useEffect(() => {
   if (isGameFinished && childId) {
@@ -202,6 +205,16 @@ function AnimalsLesson5Activity1() {
     saveRecord();
   }
 }, [isGameFinished, childId, count]);
+
+
+useEffect(() => {
+  if (count === 60 && !(
+    dropped.length === 6
+  )) {
+   stopApplause(); 
+    playTimeUp();  
+  }
+}, [count, dropped, stopApplause]);
 
   return (
     <>

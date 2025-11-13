@@ -44,6 +44,7 @@ import wrongSound from "../../../../assets/Sounds/wrong_effect.mp3";
 
 import TimesUp from "../../../../assets/Animals/Time's Up.webp";
 import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
+import TimesUpSound from "../../../../assets/Sounds/Time'sUP.mp3";
 
 function Droppable({ id, placedShape, shape }) {
   const { isOver, setNodeRef } = useDroppable({ id });
@@ -106,6 +107,7 @@ function AnimalsLesson4Activity2() {
   const childId = selectedChild?.id; // this is the child ID you need
   const [playWrong] = useSound(wrongSound, { volume: 1.0 });
   const [showReady, setShowReady] = useState(false);
+  const { playSound: playTimeUp, stopSound: stopTimeUp } = useWithSound(TimesUpSound);
 
   const animalHabitats = {
     armadilo: "desert",
@@ -214,6 +216,7 @@ function AnimalsLesson4Activity2() {
 
   const handleBack = () => {
     stopApplause();
+    stopTimeUp();
     navigate("/shapes");
   };
 
@@ -240,6 +243,15 @@ function AnimalsLesson4Activity2() {
     saveRecord();
   }
 }, [isGameFinished, childId, count]);
+
+useEffect(() => {
+  if (count === 60 && !(
+    dropped.length === 15
+  )) {
+   stopApplause(); 
+    playTimeUp();  
+  }
+}, [count, dropped, stopApplause]);
 
   return (
     <>

@@ -45,6 +45,7 @@ import TimesUp from "../../../../assets/Animals/Time's Up.webp";
 import BabyTutorial1 from "../../../../assets/videos/BabyTutorial1.mp4";
 
 import ReadySetGo from "../../../../assets/Animals/ReadySetGo/ReadySetGo.mp4";
+import TimesUpSound from "../../../../assets/Sounds/Time'sUP.mp3";
 
 const PROGRESS_KEY = "alphabetMediumProgress";
 function saveProgress(level) {
@@ -81,6 +82,8 @@ function AnimalsLessonActivity1() {
   const navigate = useNavigate();
   const { playSound: playApplause, stopSound: stopApplause } = useWithSound(applause);
   const [playWrong] = useSound(wrongSound, { volume: 1.0 });
+  
+  const { playSound: playTimeUp, stopSound: stopTimeUp } = useWithSound(TimesUpSound);
 
   const [dropped, setDropped] = useState({});
   const [count, setCount] = useState(1);
@@ -206,11 +209,14 @@ function AnimalsLessonActivity1() {
   }
 
   const isGameFinished =
-    Boolean(dropped["dog"]) &&
-    Boolean(dropped["sheep"]) &&
-    Boolean(dropped["cat"]) &&
-    Boolean(dropped["chicken"]) &&
-    Boolean(dropped["cow"]) || count >= 60;
+   (dropped["dog"]) &&
+(dropped["sheep"]) &&
+(dropped["cat"]) &&
+(dropped["chicken"]) &&
+(dropped["cow"]) || count >= 60;
+
+
+
 
   // Background music
   useEffect(() => {
@@ -228,28 +234,15 @@ function AnimalsLessonActivity1() {
 
   // Applause when finished
   useEffect(() => {
-    let applauseAudio;
-    let soundTimeout;
-    if (isGameFinished) {
-      applauseAudio = new Audio(applause);
-      applauseAudio.volume = 0.9;
-      applauseAudio.play().catch(() => {});
-      saveProgress("level1");
-      soundTimeout = setTimeout(() => {
-        if (applauseAudio) {
-          applauseAudio.pause();
-          applauseAudio.currentTime = 0;
-        }
-      }, 8000);
-    }
-    return () => {
-      if (soundTimeout) clearTimeout(soundTimeout);
-      if (applauseAudio) {
-        applauseAudio.pause();
-        applauseAudio.currentTime = 0;
+      let soundTimeout;
+      if (isGameFinished) {
+        playApplause();
+        saveProgress("level1");
+        soundTimeout = setTimeout(() => stopApplause(), 8000);
       }
-    };
-  }, [isGameFinished]);
+      return () => { clearTimeout(soundTimeout); stopApplause(); };
+    }, [isGameFinished, playApplause, stopApplause]);
+  
 
   // Timer
  useEffect(() => {
@@ -276,6 +269,7 @@ function AnimalsLessonActivity1() {
   const handleBack = () => {
     stopApplause();
     navigate("/shapes");
+    stopTimeUp();
   };
 
   const handleReadyEnd = () => {
@@ -306,6 +300,21 @@ setShowReady(false);
     saveRecord();
   }
 }, [isGameFinished, childId, count]);
+
+
+    useEffect(() => {
+  if (count === 60 && !(
+ (dropped["dog"]) &&
+(dropped["sheep"]) &&
+(dropped["cat"]) &&
+(dropped["chicken"]) &&
+(dropped["cow"])
+  )) {
+   stopApplause(); 
+    playTimeUp();  
+  }
+}, [count, dropped, stopApplause]);
+
 
 
   return (

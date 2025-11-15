@@ -11,7 +11,7 @@ function Login() {
      <div className="translate-y-26"> 
     <Form route="/api/token/" method="login" />
   </div>
-          <div className="absolute top-[75%] md:top-[80%] lg:top-[90%] xl:top-[90%] 2xl:top-[70%] text-blue-500  w-fit ">
+          <div className="absolute top-[75%] md:top-[80%] lg:top-[90%] xl:top-[90%] 2xl:top-[90%] text-blue-500  w-fit ">
     <Link to="/forgotPassword">
       <p className="hover:underline">Forgot Password?</p>
     </Link>

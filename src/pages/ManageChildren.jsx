@@ -9,6 +9,9 @@ function ManageChildren() {
   const [query, setQuery] = useState("");
   const [searchParameters] = useState(['child_full_name', 'section', 'class_sched']);
   const [editingChild, setEditingChild] = useState(null);
+
+  const [teacherRole, setTeacherRole] = useState([]);
+
   const [editForm, setEditForm] = useState({
     first_name: '',
     last_name: '',
@@ -23,6 +26,7 @@ function ManageChildren() {
         const res = await api.get("/api/parent-children/");
         setChildren(res.data);
         setLoading(false);
+        console.log("Child updated:", res.data);
       } catch (err) {
         console.error("Error fetching children:", err);
         alert(err.response?.data?.error || "Failed to fetch children.");
@@ -30,6 +34,23 @@ function ManageChildren() {
       }
     };
     fetchChildren();
+  }, []);
+
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await api.get("/api/teachers/");
+        setTeacherRole(res.data);
+        console.log("Fetched Teacher:", res.data);
+
+      } catch (err) {
+        console.error("Error fetching users:", err);
+        alert(err.response?.data?.error || "Failed to fetch users.");
+        setLoading(false);
+      }
+    };
+    fetchUsers();
   }, []);
 
   // Search functionality
@@ -58,6 +79,7 @@ function ManageChildren() {
       first_name: child.child_full_name?.split(' ')[0] || '',
       last_name: child.child_full_name?.split(' ').slice(1).join(' ') || '',
       birth_date: birthDateFormatted,
+      
       class_sched: child.class_sched || ''
     });
   };
@@ -104,7 +126,7 @@ function ManageChildren() {
         birth_date: '',
         class_sched: ''
       });
-      
+ 
       alert("Child profile updated successfully!");
     } catch (err) {
       console.error("Error updating child:", err);
@@ -154,6 +176,7 @@ function ManageChildren() {
                 <tr className="font-bold border-2 text-2xl">
                   <th className="border-2 bg-amber-400 p-2 min-w-[150px]">Child Name</th>
                   <th className="border-2 bg-amber-400 p-2 min-w-[180px]">Section</th>
+                  <th className='border-2 bg-amber-400 p-2 min-w-[180px]'>Teacher</th>
                   <th className="border-2 bg-amber-400 p-2 min-w-[200px]">Class Schedule</th>
                   <th className="border-2 bg-amber-400 p-2 min-w-[150px]">Birth Date</th>
                   <th className="border-2 bg-amber-400 p-2 min-w-[120px]">Actions</th>
@@ -183,6 +206,9 @@ function ManageChildren() {
                           </div>
                         </td>
                         <td className="border-2 p-2 break-words">{child.section}</td>
+                        
+               
+                        
                         <td className="border-2 p-2 break-words">
                           <select
                             value={editForm.class_sched}
@@ -223,6 +249,10 @@ function ManageChildren() {
                       <>
                         <td className="border-2 p-2 break-words max-w-[300px]">{child.child_full_name}</td>
                         <td className="border-2 p-2 break-words max-w-[250px]">{child.section || 'N/A'}</td>
+
+                         
+                        <td className='border-2 p-2 break-words'>{child.teacher_name}</td>
+
                         <td className="border-2 p-2 break-words max-w-[300px]">{child.class_sched || 'N/A'}</td>
                         <td className="border-2 p-2 break-words max-w-[200px]">{child.birth_date || 'N/A'}</td>
                         <td className="border-2 p-2 break-words">

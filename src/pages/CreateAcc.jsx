@@ -13,13 +13,35 @@ function CreateAcc() {
   const [role, setRole] = useState(""); 
   const [roles, setRoles] = useState([]); 
   const [message, setMessage] = useState("");
+  const [teacherRole, setTeacherRole] = useState("");
+const [schedule, setSchedule] = useState(""); // string for selected value\;
+  const [loading, setLoading] = useState(true);
+
+
+
+      useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await api.get("/api/users/");
+        setTeacherRole(res.data);     
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching users:", err);
+        alert(err.response?.data?.error || "Failed to fetch users.");
+        setLoading(false);
+      }
+    };
+    fetchUsers();
+  }, []);
+
+
 
   useEffect(() => {
     const fetchRoles = async () => {
       try {
         const res = await api.get("/api/roles/");
         setRoles(res.data);
-        if (res.data.length > 0) setRole(res.data[0]);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching roles:", error);
       }
@@ -35,7 +57,10 @@ function CreateAcc() {
     setConfirmPassword("");
     setEmail("");
     setMessage("");
+    setRole("");
+    setSchedule("");
   };
+
 
 
   
@@ -67,40 +92,64 @@ const validate = (value) => {
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const result = validate(password);
+  const result = validate(password);
+  if (!result.valid) {
+    setMessage(result.message);
+    setTimeout(() => setMessage(""), 5000);
+    return;
+  }
 
-if (!result.valid) {
-  setMessage(result.message);
-  setTimeout(() => setMessage(""), 5000);
-  return;
-}
+  // Count total teachers
+  const teacherCount = teacherRole.filter((u) => u.role_name === "Teacher").length;
 
+  if (role === "Teacher" && teacherCount >= 2) {
+    setMessage("Only 2 teachers are allowed in the system.");
+    return;
+  }
 
-    try {
-      const response = await api.post("/api/register/", {
-        username,
-        password,
-        confirm_password: confirmPassword,
-        email,
-        first_name: firstName,
-        last_name: lastName,
-        role,
-      });
+  // 🔥 CHECK IF SCHEDULE IS ALREADY USED BY ANOTHER TEACHER
+  if (role === "Teacher") {
+    const duplicateSchedule = teacherRole.some(
+      (u) => u.role_name === "Teacher" && u.class_sched === schedule
+    );
 
-      setMessage(response.data.message);
-      alert("Account created successfully!");
-      handleClear();
-    } catch (error) {
-      console.error(error);
-      setMessage(error.response?.data?.error || "Something went wrong.");
+    if (duplicateSchedule) {
+      setMessage("A teacher is already assigned to this schedule.");
+      return;
     }
-  };
+  }
+
+  try {
+    const response = await api.post("/api/register/", {
+      username,
+      password,
+      confirm_password: confirmPassword,
+      email,
+      first_name: firstName,
+      last_name: lastName,
+      role,
+      class_sched: schedule,
+    });
+
+    setMessage(response.data.message);
+    alert("Account created successfully!");
+    handleClear();
+  } catch (error) {
+    console.error(error);
+    setMessage(error.response?.data?.error || "Something went wrong.");
+  }
+};
+
+
+  if (loading) { 
+    return <div className="h-[100vh] w-[100vw] bg-white text-blue-400">Loading...</div>;
+  }
 
   return (
     <div
-      className="flex justify-center items-center h-[100vh] w-[100wh] bg-cover"
+      className="flex justify-center items-center h-[100%] w-[100wh] bg-cover"
       style={{ backgroundImage: `url(${CreateUserBG})` }}
     >
       <div className="bg-amber-300 p-5 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-4 w-[400px]">
@@ -183,24 +232,46 @@ if (!result.valid) {
             />
           </div>
 
-          <div className="m-3">
-            <label className="block mb-1">Role</label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full p-2 rounded-md border"
-            >
-              {roles.length > 0 ? (
-                roles.map((r, index) => (
-                  <option key={index} value={r}>
-                    {r}
-                  </option>
-                ))
-              ) : (
-                <option>Loading roles...</option>
-              )}
-            </select>
-          </div>
+
+
+<div className="m-3">
+            <label className="block mb-1">Role:</label>
+           <select
+  value={role}
+  onChange={(e) => setRole(e.target.value)}
+  className="w-full p-2 rounded-md border"
+>
+  <option value="" disabled>
+    --Select Role--
+  </option>
+
+  {roles.map((r, index) => (
+      <option key={index} value={r}>
+        {r}
+      </option>
+    ))}
+</select>
+</div>
+
+<div className="m-3">
+  <label className="block mb-1">Schedule:</label>
+  <select
+    required={role === "Teacher"} // <-- make required only if role is Teacher
+    value={schedule}
+    onChange={(e) => setSchedule(e.target.value)}
+    className={`w-full p-2 rounded-md border ${role !== "Teacher" ? "cursor-not-allowed text-gray-600" : ""}`}
+    disabled={role !== "Teacher"} // <-- enable only if role is Teacher
+  >
+    <option value="" disabled>
+      --Select Schedule--
+    </option>
+    <option value="8:00 AM to 11:00 AM">Morning: 8:00 AM to 11:00 AM</option>
+    <option value="11:00 AM to 1:00 PM">Noon: 11:00 AM to 1:00 PM</option>
+  </select>
+</div>
+
+
+
 
           <div className="flex gap-4 justify-center mt-4">
             <button

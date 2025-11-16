@@ -39,6 +39,7 @@ function ManageAcc() {
         const res = await api.get("/api/users/");
         setUsers(res.data);
         setLoading(false);
+        console.log(res.data);
       } catch (err) {
         console.error("Error fetching users:", err);
         alert(err.response?.data?.error || "Failed to fetch users.");
@@ -165,11 +166,12 @@ function ManageAcc() {
   };
 
   // Format date
-  const formatDate = (dateString) => {
-    if (!dateString) return 'N/A';
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
-  };
+const formatDate = (dateString) => {
+  if (!dateString) return 'N/A';
+  const [day, month, year] = dateString.split('/'); // split DD/MM/YYYY
+  const date = new Date(`${year}-${month}-${day}`); // convert to YYYY-MM-DD
+  return date.toLocaleDateString();
+};
 
   return (
     <>
@@ -205,8 +207,10 @@ function ManageAcc() {
                   <th className="border-2 bg-amber-400 p-2 min-w-[120px]">Last Name</th>
                   <th className="border-2 bg-amber-400 p-2 min-w-[180px]">Email</th>
                   <th className="border-2 bg-amber-400 p-2 min-w-[100px]">Role</th>
+                  <th className="border-2 bg-amber-400 p-2 min-w-[150px]"> Schedule</th>
                   <th className="border-2 bg-amber-400 p-2 min-w-[130px]">Date Joined</th>
                   <th className="border-2 bg-amber-400 p-2 min-w-[150px]">Actions</th>
+                 
                 </tr>
               </thead>
               <tbody>
@@ -293,6 +297,7 @@ function ManageAcc() {
                         <td className="border-2 p-2 break-words max-w-[200px]">{user.last_name || 'N/A'}</td>
                         <td className="border-2 p-2 break-words max-w-[250px]">{user.email || 'N/A'}</td>
                         <td className="border-2 p-2 break-words max-w-[150px]">{user.role_name || 'N/A'}</td>
+                        <td className="border-2 p-2 break-words max-w-[150px]">{user.class_sched || 'N/A'} </td>
                         <td className="border-2 p-2 break-words max-w-[180px]">{formatDate(user.date_joined)}</td>
                         <td className="border-2 p-2 break-words">
                           <div className="flex justify-center items-center gap-1 flex-wrap">

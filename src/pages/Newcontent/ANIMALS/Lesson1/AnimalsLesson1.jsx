@@ -24,6 +24,7 @@ import Back from "../../../../components/Back";
 import ScoreIndication from "../../../../assets/Animals/ScoreIndication.webp";
 import ScoreIndicationSmall from "../../../../assets/Animals/score star smallerScreen.webp";
 
+
 function AnimalLesson1() {
   const [clicked, setClicked] = useState(false);
   const [clickedID, setClickedID] = useState(null);
@@ -144,6 +145,10 @@ const playSound = (soundFile) => {
       navigate("/lessons/animals/lesson1/activity2");
     }
   };
+
+  if (loadingProgress) { 
+    return <div className="h-[100vh] w-[100vw] bg-white text-blue-400">Loading...</div>;
+  }
 
   return (
     <>

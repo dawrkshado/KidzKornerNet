@@ -13,6 +13,7 @@ const [timeCompletions, setTimeCompletions] = useState([]);
 const [loading, setLoading] = useState(true);
 const [query,setQuery] = useState("")
 const [searchParameters] = useState(['child_full_name','section'])
+const [currentChild,setCurrentChild] = useState(null);
 
 
 useEffect(() => {
@@ -20,9 +21,9 @@ useEffect(() => {
       try {
         const res = await api.get("/api/child_profile/");
         const data = res.data
-        console.log(data);
         setChildName(data)
         setLoading(false);
+
       } catch (err) {
         console.error("Not logged in:", err);
       }
@@ -42,6 +43,23 @@ const fetchTimeCompletions = async () => {
     useEffect(() => {
       fetchTimeCompletions();
     }, []);
+
+
+  
+useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const res = await api.get("/api/user-profile/");
+        const data = res.data
+        setCurrentChild(data)
+
+        setLoading(false);
+      } catch (err) {
+        console.error("Not logged in:", err);
+      }
+    };
+    checkUser();
+  }, []);
 
 
 

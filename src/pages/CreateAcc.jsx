@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import CreateUserBG from "../assets/Admin/CreateUSER.webp";
 import api from "../api";
 import validator from "validator"
+import Back from "../components/Back";
 
 function CreateAcc() {
   const [firstName, setFirstName] = useState("");
@@ -172,6 +173,7 @@ const handleSubmit = async (e) => {
       className="flex justify-center items-center h-[100%] 2xl:h-[100vh] w-[100wh] bg-cover"
       style={{ backgroundImage: `url(${CreateUserBG})` }}
     >
+      <Back />
       <div className="bg-amber-300 p-5 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-4 w-[400px]">
         <h2 className="text-xl font-bold">Create New User</h2>
 

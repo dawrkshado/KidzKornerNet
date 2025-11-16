@@ -115,6 +115,12 @@ function ParentsKorner() {
       alt="Parental Guidance"
       className="w-full h-full object-cover rounded-lg "
     />
+
+    {hoveredItem === "Limit Screen Time" && (
+              <div className="absolute text-sm top-[30%] left-[10%] bg-black text-white p-2 rounded mt-2">
+                {hoveredItem}
+              </div>
+            )}
   </div>
 </Link>
 
@@ -127,8 +133,18 @@ function ParentsKorner() {
         </div>
 
          
-        <Link to="/uploadedFiles">     <div className='text-5xl absolute top-[40%] left-[30%] z-10 hover:cursor-pointer  motion-preset-pulse-sm motion-duration-2000    '> <h1> Files</h1></div>
-        <img src={files} alt="" className='h-[30%] w-[10%] absolute top-[40%] left-[30%] hover:cursor-pointer  motion-preset-pulse-sm motion-duration-2000   ' />
+        <Link to="/uploadedFiles">  
+        <div onMouseEnter={() => handleHover("Check Teacher Uploaded Files")} 
+        onMouseLeave={() => setHoveredItem()} className='h-[30%] w-[10%]  absolute top-[40%] left-[30%] hover:cursor-pointer  motion-preset-pulse-sm motion-duration-2000   ' >
+        <div className=' text-5xl absolute  z-10 hover:cursor-pointer'> <h1> Files</h1></div>
+        <img src={files} alt="" className='h-[100%] w-[100%]' />
+        {hoveredItem === "Check Teacher Uploaded Files" && (
+              <div className="absolute text-sm top-[20%] bg-black text-white p-2 rounded mt-2">
+                {hoveredItem}
+              </div>
+            )}
+
+            </div> 
         </Link>
   
         <Link to="/childRegistration">

@@ -7,6 +7,7 @@ function TeacherUploadPage() {
   const [title, setTitle] = useState("");
   const [link, setLink] = useState("");
   const [uploads, setUploads] = useState([]);
+  const [teachertData, setTeacherData] = useState(null);
 
   const fetchUploads = async () => {
     try {
@@ -16,10 +17,28 @@ function TeacherUploadPage() {
         },
       });
       setUploads(res.data);
+      console.log("Uploads fetched:", res.data);
     } catch (err) {
       console.error("Error fetching uploads:", err);
     }
   };
+
+
+  
+  useEffect(() => {
+    const fetchTeacherData = async () => {
+      try {
+        const res = await api.get("/api/user-profile/");
+        setTeacherData(res.data);
+        console.log("Teacher Data:", res.data);
+      } catch (err) {
+        console.error("Error loading parent:", err);
+      }
+    };
+
+    fetchTeacherData();
+  }, []);
+
 
   useEffect(() => {
     fetchUploads();
@@ -138,7 +157,8 @@ function TeacherUploadPage() {
 
           <h3 className="text-xl font-bold mt-8 mb-4">Your Uploads</h3>
          <ul className="space-y-4">
-  {uploads.map((f) => (
+
+  {uploads.filter(f => f.uploader_name ===`${teachertData?.first_name} ${teachertData?.last_name}`).map((f) => (
     <li key={f.id} className="border p-3 rounded flex flex-col md:flex-row md:items-center md:justify-between ">
       <div>
         <strong>{f.title}</strong>

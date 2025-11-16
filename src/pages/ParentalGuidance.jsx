@@ -2,6 +2,7 @@ import { useTimer } from "../TimeProvider.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Back from "../components/Back.jsx";
 
 function UnlockOverlay() {
   const {
@@ -50,6 +51,7 @@ function UnlockOverlay() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-yellow-100 relative overflow-hidden">
       {/* Timer Card */}
+      <Back/>
       <div className="bg-white p-6 rounded-2xl shadow-xl text-center w-80 z-10">
         <h1 className="text-2xl font-bold mb-4 text-amber-700">
           Parental Timer <br />

@@ -149,7 +149,7 @@ const validate = (value) => {
 
   return (
     <div
-      className="flex justify-center items-center h-[100%] w-[100wh] bg-cover"
+      className="flex justify-center items-center h-[100%] 2xl:h-[100vh] w-[100wh] bg-cover"
       style={{ backgroundImage: `url(${CreateUserBG})` }}
     >
       <div className="bg-amber-300 p-5 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-4 w-[400px]">

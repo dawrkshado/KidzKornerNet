@@ -93,10 +93,10 @@ const validate = (value) => {
 
 
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
-                  console.log("Selected schedule:", schedule);
-console.log("Existing teacher schedules:", teacherRole.map(u => u.class_sched));
+  console.log("Selected schedule:", schedule);
+  console.log("Existing teacher schedules:", teacherRole.map(u => u.class_sched));
 
   const result = validate(password);
   if (!result.valid) {
@@ -126,24 +126,40 @@ console.log("Existing teacher schedules:", teacherRole.map(u => u.class_sched));
   }
 
   try {
-    const response = await api.post("/api/register/", {
-      username,
-      password,
-      confirm_password: confirmPassword,
-      email,
-      first_name: firstName,
-      last_name: lastName,
-      role,
-      class_sched: schedule,
-    });
+  const response = await api.post("/api/register/", {
+    username,
+    password,
+    confirm_password: confirmPassword,
+    email,
+    first_name: firstName,
+    last_name: lastName,
+    role,
+    class_sched: schedule,
+  });
 
-    setMessage(response.data.message);
-    alert("Account created successfully!");
-    handleClear();
-  } catch (error) {
-    console.error(error);
-    setMessage(error.response?.data?.error || "Something went wrong.");
+  setMessage(response.data.message);
+  alert("Account created successfully!");
+
+  // 🔹 Update teacherRole state if a teacher was created
+  if (role === "Teacher") {
+    setTeacherRole(prev => [
+      ...prev,
+      {
+        username,
+        first_name: firstName,
+        last_name: lastName,
+        role_name: "Teacher",
+        class_sched: schedule
+      }
+    ]);
   }
+
+  handleClear();
+} catch (error) {
+  console.error(error);
+  setMessage(error.response?.data?.error || "Something went wrong.");
+}
+
 };
 
 

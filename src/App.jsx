@@ -13,6 +13,8 @@ import NotFound from "./pages/NotFound.jsx"
 import ScrollToTop from "./components/ScrollToTop.jsx"
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx"
+import ArchivedUsers from "./pages/ArchivedUsers.jsx";
+import TeacherArchivedChildren from "./pages/TeacherArchivedChildren.jsx";
 
 import Stories from "./pages/Stories.jsx"
 import Story1 from "./pages/Story1.jsx"
@@ -237,7 +239,7 @@ function App() {
             <Route path="/studentmanagement" element={<StudentManagement />} />
             <Route path="/usercontrol" element={<UserAccControl />} />
             <Route path="/" element={<Navigate to="/teacher"/>} />
-         
+            <Route path="/teacherarchivedchildren" element={<TeacherArchivedChildren/>}/>
             <Route path="/dashboardparentz" element={<ParentsDashboard/>}/>
         </>}
 
@@ -362,6 +364,7 @@ function App() {
               <Route path="/admin" element={<Admin/>}/>
               <Route path="/manageaccounts" element={<ManageAcc/>}/>
               <Route path="/createaccounts" element={<CreateAcc/>}/>
+              <Route path="/archived" element={<ArchivedUsers/>}></Route>
           </>}
           
         

@@ -266,7 +266,6 @@ function ParentsKorner() {
              <h1 className='text-2xl'>Are you sure you want to <span className='font-bold'>LOGOUT?</span></h1> 
             <div className='flex gap-20 justify-center'><Logout/> <h1 className='text-2xl bg-green-500 hover:bg-green-400 transition transform hover:scale-110 rounded-lg hover:cursor-pointer' onClick={handleExit}>Cancel</h1></div>
          </div>
-
        
 
          {clicked }

@@ -3,6 +3,7 @@ import logoutbutton from "../assets/Admin/logoutbuton.webp";
 import managebutton from "../assets/Admin/managebutton.webp";
 import createbutton from "../assets/Admin/createbutton.webp";
 import { Link, useNavigate } from "react-router-dom";
+import ArchivedUsersClick from "../assets/Admin/ArchivedUsersClick.webp";
 
 function Admin() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ function Admin() {
 
   return (
     <div
-      className="relative min-h-screen w-screen bg-cover bg-center bg-no-repeat"
+      className="absolute min-h-screen w-screen bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${adminbg})` }}
     >
 
@@ -47,7 +48,11 @@ function Admin() {
           }}
         />
       </Link>
-
+      
+        <Link to="/archived">
+        <img src={ArchivedUsersClick} className="h-[30%] w-[15%] absolute right-150 bottom-10 2xl:right-180  cursor-pointer hover:scale-105 transition-transform" />
+        </Link>
+        
 
       <img
         src={logoutbutton}

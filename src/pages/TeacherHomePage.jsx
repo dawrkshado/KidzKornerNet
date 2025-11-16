@@ -7,7 +7,9 @@ import { Link } from 'react-router-dom'
 import Logout from "../components/Logout";
 import { useEffect,useState } from "react";
 import api from "../api.js";
+import ArchivedChildren from "../assets/TeacherHomePage/ArchivedChildrenClick.webp"; 
 
+import logoutImg from "../assets/logout.webp"
 
 function TeacherHomePage() {
 const [name, setName] = useState(null);
@@ -79,8 +81,16 @@ const handleCancel = () =>{
         alt="blue box Button for upload"
         className="absolute xl:left-[55%] h-[22%]  w-[25%] xl:top-[50%]"/></Link>
 
-            <div className="h-fit w-fit absolute text-3xl top-0 bg-amber-300 hover:cursor-pointer hover:opacity-80" onClick={() =>handleClick("logout")}> Logout</div>
+
+        <Link to={"/teacherarchivedchildren "}>
+            <img src={ArchivedChildren} className="absolute xl:left-[40%] h-[22%]  w-[25%] xl:top-[80%]" />
+        </Link>
+         
+
+            <div className="h-[5%] w-[5%] absolute text-3xl top-0 bg-amber-300 hover:cursor-pointer hover:opacity-80" onClick={() =>handleClick("logout")}> <img src={logoutImg} alt="logout button" /></div>
         </div>
+
+      
 
 
         {clickedLogout && logout === "logout" && <>

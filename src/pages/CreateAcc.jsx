@@ -20,19 +20,21 @@ const [schedule, setSchedule] = useState(""); // string for selected value\;
 
 
       useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await api.get("/api/users/");
-        setTeacherRole(res.data);     
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching users:", err);
-        alert(err.response?.data?.error || "Failed to fetch users.");
-        setLoading(false);
-      }
-    };
-    fetchUsers();
-  }, []);
+  const fetchUsers = async () => {
+    try {
+      const res = await api.get("/api/users/");
+      console.log("Users fetched:", res.data); // check this
+      setTeacherRole(Array.isArray(res.data) ? res.data : [res.data]);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching users:", err);
+      alert(err.response?.data?.error || "Failed to fetch users.");
+      setLoading(false);
+    }
+  };
+  fetchUsers();
+}, []);
+
 
 
 
@@ -93,6 +95,8 @@ const validate = (value) => {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
+                  console.log("Selected schedule:", schedule);
+console.log("Existing teacher schedules:", teacherRole.map(u => u.class_sched));
 
   const result = validate(password);
   if (!result.valid) {

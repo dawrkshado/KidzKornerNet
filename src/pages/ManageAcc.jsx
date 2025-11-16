@@ -43,7 +43,7 @@ function ManageAcc() {
       } catch (err) {
         console.error("Error fetching users:", err);
         alert(err.response?.data?.error || "Failed to fetch users.");
-        setLoading(false);
+        setLoading(false)
       }
     };
     fetchUsers();

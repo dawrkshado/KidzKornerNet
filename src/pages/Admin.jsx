@@ -4,8 +4,13 @@ import managebutton from "../assets/Admin/managebutton.webp";
 import createbutton from "../assets/Admin/createbutton.webp";
 import { Link, useNavigate } from "react-router-dom";
 import ArchivedUsersClick from "../assets/Admin/ArchivedUsersClick.webp";
+import api from "../api";
+import { useEffect } from "react";
+
 
 function Admin() {
+
+
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -15,6 +20,7 @@ function Admin() {
 
     navigate("/login");
   };
+
 
   return (
     <div

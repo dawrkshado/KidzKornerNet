@@ -230,7 +230,7 @@ function ManageAcc() {
                             ))}
                           </select>
                         </td>
-                        <td className="border-2 p-2 break-words">{formatDate(user.date_joined)}</td>
+                        <td className="border-2 p-2 break-words">{user.date_joined}</td>
                         <td className="border-2 p-2 break-words">
                           <div className="flex flex-col justify-center items-center gap-1">
                             <input

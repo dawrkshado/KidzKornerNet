@@ -233,7 +233,7 @@ function App() {
             {!role && <Route path="*" element={<Navigate to="/login" replace />} />}
 
            {role === "Teacher" && <>
-            <Route path="/teacher" element={<TeacherHomePage />} />
+            <Route path="/teacher" element={<ProtectedRoute><TeacherHomePage/></ProtectedRoute>} />
             <Route path="/uploadcontents" element={<UploadContents />} />
             <Route path="/dashboard" element={<DashBoard />} />
             <Route path="/studentmanagement" element={<StudentManagement />} />
@@ -314,7 +314,7 @@ function App() {
               <Route path="/X" element={<X />} />
               <Route path="/Y" element={<Y />} />
               <Route path="/Z" element={<Z />} />
-              <Route path="/parentskorner" element={<ParentsKorner/>}/>
+              <Route path="/parentskorner" element={ <ProtectedRoute><ParentsKorner/></ProtectedRoute> }/>
               <Route path="/lessons" element={<Lessons/>}/>
               <Route path="/lessons/animals" element={<Animals/>}/>
 
@@ -360,12 +360,26 @@ function App() {
               <Route path="/color/hard/level1" element={<ColorGameHardLevel1/>}/>
           </>}
 
-          {role == "Admin" && <>
-              <Route path="/admin" element={<Admin/>}/>
-              <Route path="/manageaccounts" element={<ManageAcc/>}/>
-              <Route path="/createaccounts" element={<CreateAcc/>}/>
-              <Route path="/archived" element={<ArchivedUsers/>}></Route>
-          </>}
+          {role === "Admin" && (
+  <>
+    <Route path="/admin" element={
+      <ProtectedRoute><Admin/></ProtectedRoute>
+    }/>
+
+    <Route path="/manageaccounts" element={
+      <ProtectedRoute><ManageAcc/></ProtectedRoute>
+    }/>
+
+    <Route path="/createaccounts" element={
+      <ProtectedRoute><CreateAcc/></ProtectedRoute>
+    }/>
+
+    <Route path="/archived" element={
+      <ProtectedRoute><ArchivedUsers/></ProtectedRoute>
+    }/>
+  </>
+)}
+
           
         
         <Route path="*" element={<NotFound />} />

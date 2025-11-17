@@ -32,6 +32,25 @@ function ManageAcc() {
     fetchRoles();
   }, []);
 
+
+
+  const handleArchiveUser = async (userId, username) => {
+  if (!window.confirm(`Are you sure you want to archive user "${username}"?`)) return;
+
+  try {
+    // Send request to archive the user
+    await api.post(`/api/users/${userId}/archive/`);
+
+    // Remove the archived user from current list
+    setUsers(users.filter(user => user.id !== userId));
+
+    alert(`User "${username}" has been archived.`);
+  } catch (err) {
+    console.error("Error archiving user:", err);
+    alert(err.response?.data?.error || "Failed to archive user.");
+  }
+};
+
   // Fetch users
   useEffect(() => {
     const fetchUsers = async () => {
@@ -118,60 +137,8 @@ function ManageAcc() {
     });
   };
 
-  // Handle delete
-  const handleDeleteUser = async (userId, username) => {
-    try {
-      // Fetch deletion info to show warning
-      const infoRes = await api.get(`/api/users/${userId}/delete-info/`);
-      const deletionInfo = infoRes.data;
-      
-      // Build warning message
-      let warningMessage = `⚠️ WARNING: Deleting user "${username}" will PERMANENTLY delete:\n\n`;
-      
-      if (deletionInfo.children_count > 0) {
-        warningMessage += `• ${deletionInfo.children_count} child/children\n`;
-        if (deletionInfo.time_completions_count > 0) {
-          warningMessage += `  → ${deletionInfo.time_completions_count} game progress records\n`;
-        }
-      }
-      
-      if (deletionInfo.uploaded_files_count > 0) {
-        warningMessage += `• ${deletionInfo.uploaded_files_count} uploaded file(s)\n`;
-      }
-      
-      if (!deletionInfo.has_related_data) {
-        warningMessage += `• No related data found\n`;
-      }
-      
-      warningMessage += `\nThis action CANNOT be undone!\n\nAre you sure you want to proceed?`;
-      
-      if (!window.confirm(warningMessage)) {
-        return;
-      }
-    } catch (err) {
-      // If we can't fetch info, show basic warning
-      if (!window.confirm(`Are you sure you want to delete user "${username}"? This will delete all their children, progress, and uploaded files. This action cannot be undone.`)) {
-        return;
-      }
-    }
+  
 
-    try {
-      await api.delete(`/api/users/${userId}/delete/`);
-      setUsers(users.filter(user => user.id !== userId));
-      alert(`User "${username}" deleted successfully!`);
-    } catch (err) {
-      console.error("Error deleting user:", err);
-      alert(err.response?.data?.error || "Failed to delete user.");
-    }
-  };
-
-  // Format date
-const formatDate = (dateString) => {
-  if (!dateString) return 'N/A';
-  const [day, month, year] = dateString.split('/'); // split DD/MM/YYYY
-  const date = new Date(`${year}-${month}-${day}`); // convert to YYYY-MM-DD
-  return date.toLocaleDateString();
-};
 
   return (
     <>
@@ -298,21 +265,25 @@ const formatDate = (dateString) => {
                         <td className="border-2 p-2 break-words max-w-[250px]">{user.email || 'N/A'}</td>
                         <td className="border-2 p-2 break-words max-w-[150px]">{user.role_name || 'N/A'}</td>
                         <td className="border-2 p-2 break-words max-w-[150px]">{user.class_sched || 'N/A'} </td>
-                        <td className="border-2 p-2 break-words max-w-[180px]">{formatDate(user.date_joined)}</td>
+                        <td className="border-2 p-2 break-words max-w-[180px]">{user.date_joined}</td>
                         <td className="border-2 p-2 break-words">
+
+
                           <div className="flex justify-center items-center gap-1 flex-wrap">
+
+                            <button
+  onClick={() => handleArchiveUser(user.id, user.username)}
+  className="bg-red-600 text-white px-2 py-1 scale-90 rounded-md hover:bg-yellow-500 transition transform hover:scale-100 whitespace-nowrap"
+>
+  Archive
+</button>
                             <button
                               onClick={() => handleEditClick(user)}
                               className="bg-blue-600 text-white px-2 py-1 scale-90 rounded-md hover:bg-blue-500 transition transform hover:scale-100 whitespace-nowrap"
                             >
                               Edit
                             </button>
-                            <button
-                              onClick={() => handleDeleteUser(user.id, user.username)}
-                              className="bg-red-600 text-white px-2 py-1 scale-90 rounded-md hover:bg-red-500 transition transform hover:scale-100 whitespace-nowrap"
-                            >
-                              Delete
-                            </button>
+                            
                           </div>
                         </td>
                       </>

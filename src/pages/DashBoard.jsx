@@ -23,6 +23,7 @@ useEffect(() => {
         const data = res.data
         setChildName(data)
         setLoading(false);
+        console.log("Child Data:", data);
 
       } catch (err) {
         console.error("Not logged in:", err);
@@ -63,23 +64,25 @@ useEffect(() => {
 
 
 
-
- const handleDeleteChild = async (childId, childName) => {
-  if (!window.confirm(`Are you sure you want to delete ${childName}?`)) return;
+  const handleArchiveChild = async (childId, childName) => {
+  if (!window.confirm(`Are you sure you want to archive ${childName}?`)) return;
 
   try {
-    const res = await api.delete("/api/delete_child/", { data: { child_id: childId } });
-    alert(res.data.message || `${childName} deleted successfully!`);
+    const res = await api.post("/api/archive_child/", { child_id: childId });
+
+    alert(res.data.message || `${childName} archived successfully!`);
+
+    // remove it from current table
     setChildName((prev) => prev.filter((c) => c.id !== childId));
-
-
-    await fetchTimeCompletions();
-    localStorage.removeItem("timeCompletions");
   } catch (err) {
-    console.error("Error deleting child:", err);
-    alert(err.response?.data?.error || "Failed to delete child.");
+    console.error("Error archiving child:", err);
+    alert(err.response?.data?.error || "Failed to archive child.");
   }
 };
+
+
+
+
 
 
 const handleChildClick = (child) => {
@@ -126,6 +129,7 @@ const searchResults = childname.filter((child) => {
                     <th className="border-2 bg-amber-400 w-[20%] p-2">Schedule</th>
                     <th className="border-2 bg-amber-400 w-[15%] p-2">Birthday</th>
                     <th className="border-2 bg-amber-400 w-[25%] 2xl:w-[20%] p-2">Parent/Guardian</th>
+                    <th className="border-2 bg-amber-400 w-[15%] p-1">Date Registered</th>
                     <th className="border-2 bg-amber-400 w-[13%] 2xl:w-[10%] p-2"></th>
                   </tr>
                 </thead>
@@ -138,9 +142,10 @@ const searchResults = childname.filter((child) => {
                       <td className="border-2 p-2">{record.class_sched}</td>
                       <td className="border-2 p-2">{record.birth_date}</td>
                       <td className="border-2 p-2">{record.parent_full_name}</td>
-                      <td className="border-2 p-2">
+                      <td className='border-2 p-2'> {record.created_at}</td>
+                      <td className="border-2 p-2 ">
 
-                      <div className=" justify-center items-center">
+                      <div className="flex flex-col justify-center items-center">
                           <button
                             onClick={() => handleChildClick(record)}
                             className="bg-gray-800 text-white px-1 py-1  scale-90 rounded-md hover:bg-gray-700 transition transform hover:scale-100"
@@ -149,11 +154,13 @@ const searchResults = childname.filter((child) => {
                           </button>
 
                           <button
-                            onClick={() => handleDeleteChild(record.id, `${record.child_full_name}`)}
-                            className="bg-red-600 text-white px-4 py-1 scale-90 rounded-md hover:bg-red-500 transition transform hover:scale-100"
-                          >
-                            Delete
-                          </button>
+  onClick={() => handleArchiveChild(record.id, record.child_full_name)}
+  className="bg-red-600 text-white px-4 py-1 scale-90 rounded-md hover:bg-red-500 transition transform hover:scale-100"
+>
+  Archive
+</button>
+
+                          
                       </div>
 
                       </td>

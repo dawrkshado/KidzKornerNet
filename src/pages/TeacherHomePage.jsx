@@ -87,7 +87,7 @@ const handleCancel = () =>{
         </Link>
          
 
-            <div className="h-[5%] w-[5%] absolute text-3xl top-0 bg-amber-300 hover:cursor-pointer hover:opacity-80" onClick={() =>handleClick("logout")}> <img src={logoutImg} alt="logout button" /></div>
+            <div className="h-[5%] w-[5%] absolute text-3xl top-0 hover:cursor-pointer hover:opacity-80" onClick={() =>handleClick("logout")}> <img src={logoutImg} alt="logout button" /></div>
         </div>
 
       

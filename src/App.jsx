@@ -239,7 +239,7 @@ function App() {
             <Route path="/studentmanagement" element={<StudentManagement />} />
             <Route path="/usercontrol" element={<UserAccControl />} />
             <Route path="/" element={<Navigate to="/teacher"/>} />
-            <Route path="/teacherarchivedchildren" element={<TeacherArchivedChildren/>}/>
+          <Route path="/teacherarchivedchildren" element={<TeacherArchivedChildren/>}/>
             <Route path="/dashboardparentz" element={<ParentsDashboard/>}/>
         </>}
 

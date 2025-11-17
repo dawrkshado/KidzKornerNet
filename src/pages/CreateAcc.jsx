@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import CreateUserBG from "../assets/Admin/CreateUSER.webp";
 import api from "../api";
-import validator from "validator"
+import validator from "validator";
 import Back from "../components/Back";
+import LoadingIndicator from "../components/LoadingIndicator.jsx";
 
 function CreateAcc() {
   const [firstName, setFirstName] = useState("");
@@ -14,18 +15,18 @@ function CreateAcc() {
   const [role, setRole] = useState(""); 
   const [roles, setRoles] = useState([]); 
   const [message, setMessage] = useState("");
-  const [teacherRole, setTeacherRole] = useState("");
-const [schedule, setSchedule] = useState(""); // string for selected value\;
+  const [teacherRole, setTeacherRole] = useState([]); // keep all users
+  const [schedule, setSchedule] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingRegister, setLoadingRegister] = useState(false);
 
-
-
-      useEffect(() => {
+  useEffect(() => {
   const fetchUsers = async () => {
     try {
       const res = await api.get("/api/users/");
-      console.log("Users fetched:", res.data); // check this
-      setTeacherRole(Array.isArray(res.data) ? res.data : [res.data]);
+      // Only keep active users
+      const activeUsers = (Array.isArray(res.data) ? res.data : [res.data]).filter(u => u.is_active);
+      setTeacherRole(activeUsers);
       setLoading(false);
     } catch (err) {
       console.error("Error fetching users:", err);
@@ -33,9 +34,9 @@ const [schedule, setSchedule] = useState(""); // string for selected value\;
       setLoading(false);
     }
   };
+
   fetchUsers();
 }, []);
-
 
 
 
@@ -64,105 +65,104 @@ const [schedule, setSchedule] = useState(""); // string for selected value\;
     setSchedule("");
   };
 
+  const validate = (value) => {
+    const hasConsecutiveNumbers = /(0123|1234|2345|3456|4567|5678|6789|9876|8765|7654|6543|5432|4321|3210)/.test(value);
 
+    if (hasConsecutiveNumbers) {
+      return { valid: false, message: "Password cannot contain consecutive numbers like 1234 or 9876." };
+    }
 
-  
-const validate = (value) => {
-  // Check for consecutive numbers like 1234 or 9876
-  const hasConsecutiveNumbers = /(0123|1234|2345|3456|4567|5678|6789|9876|8765|7654|6543|5432|4321|3210)/.test(value);
+    const isStrong = validator.isStrongPassword(value, {
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    });
 
-  if (hasConsecutiveNumbers) {
-    return { valid: false, message: "Password cannot contain consecutive numbers like 1234 or 9876." };
-  }
+    if (!isStrong) {
+      return { valid: false, message: "Password is not strong enough. Use at least 8 characters with uppercase, lowercase, number, and symbol." };
+    }
 
-  // Check if password is strong
-  const isStrong = validator.isStrongPassword(value, {
-    minLength: 8,
-    minLowercase: 1,
-    minUppercase: 1,
-    minNumbers: 1,
-    minSymbols: 1,
-  });
+    return { valid: true, message: "" };
+  };
 
-  if (!isStrong) {
-    return { valid: false, message: "Password is not strong enough. Use at least 8 characters with uppercase, lowercase, number, and symbol." };
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoadingRegister(true);
+    setMessage("");
 
-  // If both checks pass
-  return { valid: true, message: "" };
-};
-
-
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  console.log("Selected schedule:", schedule);
-  console.log("Existing teacher schedules:", teacherRole.map(u => u.class_sched));
-
-  const result = validate(password);
-  if (!result.valid) {
-    setMessage(result.message);
-    setTimeout(() => setMessage(""), 5000);
-    return;
-  }
-
-  // Count total teachers
-  const teacherCount = teacherRole.filter((u) => u.role_name === "Teacher").length;
-
-  if (role === "Teacher" && teacherCount >= 2) {
-    setMessage("Only 2 teachers are allowed in the system.");
-    return;
-  }
-
-  // 🔥 CHECK IF SCHEDULE IS ALREADY USED BY ANOTHER TEACHER
-  if (role === "Teacher") {
-    const duplicateSchedule = teacherRole.some(
-      (u) => u.role_name === "Teacher" && u.class_sched === schedule
-    );
-
-    if (duplicateSchedule) {
-      setMessage("A teacher is already assigned to this schedule.");
+    const result = validate(password);
+    if (!result.valid) {
+      setMessage(result.message);
+      setTimeout(() => setMessage(""), 5000);
+      setLoadingRegister(false);
       return;
     }
-  }
 
-  try {
-  const response = await api.post("/api/register/", {
-    username,
-    password,
-    confirm_password: confirmPassword,
-    email,
-    first_name: firstName,
-    last_name: lastName,
-    role,
-    class_sched: schedule,
-  });
+    // ✅ Count only active teachers
+    const activeTeachers = teacherRole.filter(
+      (u) => u.role_name === "Teacher" && u.is_active
+    );
 
-  setMessage(response.data.message);
-  alert("Account created successfully!");
+    if (role === "Teacher" && activeTeachers >= 2) {
+      setMessage("Only 2 active teachers are allowed in the system.");
+      setTimeout(() => setMessage(""), 5000);
+      setLoadingRegister(false);
+      return;
+    }
 
-  // 🔹 Update teacherRole state if a teacher was created
-  if (role === "Teacher") {
-    setTeacherRole(prev => [
-      ...prev,
-      {
+    // ✅ Check duplicate schedule among active teachers
+    if (role === "Teacher") {
+      const duplicateSchedule = teacherRole.some(
+        (u) => u.role_name === "Teacher" && u.is_active && u.class_sched === schedule
+      );
+
+      if (duplicateSchedule) {
+        setMessage("A teacher is already assigned to this schedule.");
+        setLoadingRegister(false);
+        return;
+      }
+    }
+
+    try {
+      const response = await api.post("/api/register/", {
         username,
+        password,
+        confirm_password: confirmPassword,
+        email,
         first_name: firstName,
         last_name: lastName,
-        role_name: "Teacher",
-        class_sched: schedule
+        role,
+        class_sched: schedule,
+      });
+
+      setMessage(response.data.message);
+      alert("Account created successfully!");
+      setLoadingRegister(false);
+
+      // 🔹 Update teacherRole state if a teacher was created
+      if (role === "Teacher") {
+        setTeacherRole(prev => [
+          ...prev,
+          {
+            username,
+            first_name: firstName,
+            last_name: lastName,
+            role_name: "Teacher",
+            class_sched: schedule,
+            is_active: true,
+          }
+        ]);
       }
-    ]);
-  }
 
-  handleClear();
-} catch (error) {
-  console.error(error);
-  setMessage(error.response?.data?.error || "Something went wrong.");
-}
-
-};
-
+      handleClear();
+    } catch (error) {
+      console.error(error);
+      setMessage(error.response?.data?.error || "Something went wrong.");
+      setLoadingRegister(false);
+    }
+  };
 
   if (loading) { 
     return <div className="h-[100vh] w-[100vw] bg-white text-blue-400">Loading...</div>;
@@ -177,7 +177,7 @@ const handleSubmit = async (e) => {
       <div className="bg-amber-300 p-5 rounded-2xl shadow-lg flex flex-col items-center justify-center gap-4 w-[400px]">
         <h2 className="text-xl font-bold">Create New User</h2>
 
-        <form className="w-full" onSubmit={handleSubmit}>
+         <form className="w-full" onSubmit={handleSubmit}>
           <div className="m-3">
             <label className="block mb-1">First Name:</label>
             <input
@@ -297,22 +297,26 @@ const handleSubmit = async (e) => {
 
           <div className="flex gap-4 justify-center mt-4">
             <button
+              disabled = {loadingRegister}
               type="submit"
-              className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600"
+              className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 disabled:bg-gray-200 disabled:cursor-not-allowed"
             >
               Register
             </button>
             <button
               type="button"
               onClick={handleClear}
-              className="bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-gray-400"
+              disabled = {loadingRegister}
+              className="bg-gray-300 text-black px-4 py-2 rounded-md hover:bg-gray-400 disabled:bg-gray-200 disabled:cursor-not-allowed"
             >
               Clear
             </button>
           </div>
         </form>
 
+
         {message && <p className="text-red-600 text-center mt-2">{message}</p>}
+        {loadingRegister && <div><LoadingIndicator/></div>}
       </div>
     </div>
   );

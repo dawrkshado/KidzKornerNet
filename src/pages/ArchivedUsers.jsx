@@ -108,7 +108,7 @@ function ArchivedUsers() {
     >
       <Back />
       <div className="absolute 2xl:top-5 right-5">
-        <img className="h-30 w-65 2xl:h-130 2xl:w-120" src={ArchivedUsersText} alt="" />
+        <img className="h-30 w-65 2xl:h-45 2xl:w-100" src={ArchivedUsersText} alt="" />
       </div>
 
       <div className="h-[90%] w-[80%] absolute top-[20%] overflow-y-auto flex flex-col gap-2">

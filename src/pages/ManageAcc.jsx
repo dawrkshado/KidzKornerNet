@@ -53,30 +53,32 @@ function ManageAcc() {
 
   // Fetch users
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await api.get("/api/users/");
-        setUsers(res.data);
-        setLoading(false);
-        console.log(res.data);
-      } catch (err) {
-        console.error("Error fetching users:", err);
-        alert(err.response?.data?.error || "Failed to fetch users.");
-        setLoading(false)
-      }
-    };
-    fetchUsers();
-  }, []);
+  const fetchUsers = async () => {
+    try {
+      const res = await api.get("/api/users/");
+      // Filter only active users
+      const activeUsers = res.data.filter(user => user.is_active);
+      setUsers(activeUsers);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching users:", err);
+      alert(err.response?.data?.error || "Failed to fetch users.");
+      setLoading(false);
+    }
+  };
 
-  // Search functionality
-  const searchResults = users.filter((user) => {
-    return searchParameters.some((key) => {
-      return (
-        user[key] &&
-        user[key].toString().toLowerCase().includes(query.toLowerCase())
-      );
-    });
-  });
+  fetchUsers();
+}, []);
+
+
+  const searchResults = users
+  .filter(u => u.is_active) // ignore inactive users
+  .filter((user) => 
+    searchParameters.some(key => 
+      user[key]?.toString().toLowerCase().includes(query.toLowerCase())
+    )
+  );
+
 
   // Handle edit button click
   const handleEditClick = (user) => {

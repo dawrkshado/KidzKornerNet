@@ -17,6 +17,8 @@ import DogDone from "../../../../assets/Animals/Lesson1/DogDone.webp";
 import Duck from "../../../../assets/Animals/Lesson1/Duck.webp";
 import DuckDone from "../../../../assets/Animals/Lesson1/DuckDone.webp";
 
+import { rectIntersection } from "@dnd-kit/core";
+
 import OneStar from "../../../../assets/Done/OneStar.webp";
 import TwoStar from "../../../../assets/Done/TwoStar.webp";
 import ThreeStar from "../../../../assets/Done/ThreeStar.webp";
@@ -78,7 +80,7 @@ function Draggable({ id, disabled = false, shape }) {
 
 
 function AnimalsLessonActivity1() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const { playSound: playApplause, stopSound: stopApplause } = useWithSound(applause);
   const { playSound: playTimeUp, stopSound: stopTimeUp } = useWithSound(TimesUpSound);
   const [dropped, setDropped] = useState({});
@@ -303,7 +305,7 @@ useEffect(() => {
 
           <DndContext onDragEnd={handleDragEnd} collisionDetection={pointerWithin}>
             {/* Droppables */}
-            <div className="flex absolute top-40 2xl:top-60 items-center justify-center h-full w-full">
+            <div className="flex absolute bottom-20 2xl:bottom-30 items-center justify-center h-fit w-full ">
               <Droppable
                 id="meow"
                 shape={<img src={Cat} alt="Cat" className="w-[200px] h-[200px] 2xl:w-[250px] 2xl:h-[250px] object-contain" />}
@@ -311,7 +313,7 @@ useEffect(() => {
               />
               <Droppable
                 id="oink"
-                shape={<img src={Pig} alt="Pig" className="w-[140px] h-[140px] 2xl:w-[250px] 2xl:h-[250px] object-contain" />}
+                shape={<img src={Pig} alt="Pig" className="w-[140px] h-[140px] 2xl:w-[250px]  2xl:h-[250px] object-contain" />}
                 placedShape={dropped["oink"] && <img src={PigDone} alt="Pig Done" className="w-[350px] h-[350px] 2xl:w-[350px] 2xl:h-[350px] object-contain" />}
               />
               <Droppable
@@ -332,8 +334,8 @@ useEffect(() => {
             </div>
 
             {/* Draggables */}
-            <div className="flex absolute gap-6 w-[100vw] justify-center z-10 top-40 2xl:top-50 p-4">
-              {!dropped["quack"] && <Draggable id="quack" shape={<img src={Quack} alt="Quack" className="h-30 w-auto 2xl:h-48 object-contain" />} />}
+            <div className="flex absolute gap-6 w-[100vw] justify-center z-10 top-40 2xl:top-50 p-4 ">
+              {!dropped["quack"] && <Draggable id="quack" shape={<img src={Quack} alt="Quack" className="h-30  w-auto 2xl:h-48 object-contain" />} />}
               {!dropped["meow"] && <Draggable id="meow" shape={<img src={Meow} alt="Meow" className="h-30 w-auto 2xl:h-48 object-contain" />} />}
               {!dropped["moo"] && <Draggable id="moo" shape={<img src={Moo} alt="Moo" className="h-30 w-auto 2xl:h-48 object-contain" />} />}
               {!dropped["oink"] && <Draggable id="oink" shape={<img src={Oink} alt="Oink" className="h-30 w-auto 2xl:h-48 object-contain" />} />}

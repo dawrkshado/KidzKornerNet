@@ -214,8 +214,6 @@ function AnimalsLesson2Activity1() {
         time: count
       };
 
-      console.log("📤 Sending progress data:", payload); // ✅ Check this in console
-
       try {
         const response = await api.post("/api/save_progress/", payload);
         console.log("✅ Game progress saved successfully:", response.data);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DndContext, useDraggable, useDroppable, pointerWithin } from "@dnd-kit/core";
 
+
 import BG from "../../../../assets/Animals/Lesson2/bg.webp";
 import Bird from "../../../../assets/Animals/Lesson1/Bird.webp";
 import Horse from "../../../../assets/Animals/Lesson1/Horse.webp";
@@ -191,8 +192,7 @@ function AnimalsLesson2Activity2() {
         time: count
       };
 
-      console.log("📤 Sending progress data:", payload); // ✅ Check this in console
-
+     
       try {
         const response = await api.post("/api/save_progress/", payload);
         console.log("✅ Game progress saved successfully:", response.data);
@@ -218,9 +218,9 @@ function AnimalsLesson2Activity2() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8 }}
-            className="absolute inset-0 bg-black/80 flex justify-center items-center z-50"
+            className="absolute inset-0 bg-black/80 flex justify-center items-center z-50 "
           >
-            <div className="relative w-[80%] md:w-[60%]">
+            <div className="relative w-[80%] md:w-[60%] ">
               <video
                 src={MoveTutorial2}
                 autoPlay
@@ -280,7 +280,7 @@ function AnimalsLesson2Activity2() {
             </div>
 
             {/* Droppables */}
-            <div className="flex h-[50%] w-[100vw] justify-around absolute lg:bottom-0">
+            <div className="flex  h-[50%] w-[100vw] justify-around absolute lg:bottom-0">
               <Droppable
                 id="water"
                 shape={<img src={WaterDroppable} alt="Water Droppable" className="h-[100%]" />}
